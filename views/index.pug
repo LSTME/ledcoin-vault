@@ -1,5 +1,9 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  section.hero.is-large.is-primary.is-bold
+    .hero-body
+      .container
+        h1.title= title
+        h2.sub-title Welcome to #{title}
+          

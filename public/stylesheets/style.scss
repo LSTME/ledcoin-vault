@@ -1,0 +1,6 @@
+@import './variables';
+@import 'bulma/bulma';
+
+.navbar + .container {
+    margin-top: 5px;
+}
