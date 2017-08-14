@@ -1,9 +1,20 @@
 extends layout
 
 block content
-  table
-      each user in users
+  .container
+    table.table.is-fullwidth
+      thead
         tr
-          td= user.id
-          td= user.firstName
-          td= user.lastName
+          th ID
+          th First name
+          th Last name
+          th Current balance
+          th Last synced
+      tbody
+        each user in users
+          tr
+            td= user.id
+            td= user.firstName
+            td= user.lastName
+            td= user.balance
+            td= moment(user.syncedAt).format('DD MMM. HH:mm')
