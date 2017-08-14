@@ -34,4 +34,5 @@ npm-debug.log
 public/stylesheets/*.css
 
 .env
-data
+data/*
+!data/.keep
