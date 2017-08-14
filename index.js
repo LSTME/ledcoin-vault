@@ -1,7 +1,9 @@
 const logger = require('./lib/logger');
-const server = require('./lib/server');
+const web = require('./lib/web');
+const tcp = require('./lib/tcp');
 
 Promise.resolve()
-  .then(async () => server(process.env.NODE_ENV || 'development'))
+  .then(async () => web(process.env.NODE_ENV || 'development'))
+  .then(async () => tcp(process.env.NODE_ENV || 'development'))
   .catch(error => logger.error(error));
 
