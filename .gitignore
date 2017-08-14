@@ -32,3 +32,5 @@ npm-debug.log
 .idea
 
 public/stylesheets/*.css
+
+.env
