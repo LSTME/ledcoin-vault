@@ -34,3 +34,4 @@ npm-debug.log
 public/stylesheets/*.css
 
 .env
+data

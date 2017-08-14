@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  table
+      each user in users
+        tr
+          td= user.id
+          td= user.firstName
+          td= user.lastName

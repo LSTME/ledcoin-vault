@@ -4,7 +4,9 @@ const router = express.Router();
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+  const { dataSource } = req;
+  const users = dataSource.getUsers();
+  res.render('users', { users });
 });
 
 module.exports = router;
