@@ -3,6 +3,7 @@
   "rules": {
     "no-console": 0,
     "max-len": "off",
-    "no-undef": "error"
+    "no-undef": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   }
 }
