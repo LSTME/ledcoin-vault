@@ -1,10 +1,11 @@
-const express = require('express');
+const home = require('./home');
+const users = require('./users');
+const bounties = require('./bounties');
 
-const router = express.Router();
-
-/* GET home page. */
-router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+module.exports = {
+  apply(app) {
+    app.use('/', home);
+    app.use('/users', users);
+    app.use('/bounties', bounties);
+  },
+};

@@ -1,3 +1,14 @@
+mixin field(key, label)
+    - value = result ? result.value[key] : ''
+    if result && result.error
+        - error = result.error.details.find(e => e.path === key)
+
+    .field
+        label.label= label
+        input.input(name=key type='text' value=value class=error ? 'is-danger' : '')
+        if error
+            p.help.is-danger= error.message
+
 doctype html
 html
   head

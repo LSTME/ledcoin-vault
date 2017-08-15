@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
   .container
@@ -8,14 +8,10 @@ block content
           th ID
           th First name
           th Last name
-          th Current balance
-          th Last synced
       tbody
         each user in users
           tr
-            td= user.id
+            td= user.$loki
             td= user.firstName
             td
-              a(href=`users/${user.id}`)= user.lastName
-            td= user.balance
-            td= moment(user.syncedAt).format('DD MMM. HH:mm')
+              a(href=`users/${user.$loki}`)= user.lastName
