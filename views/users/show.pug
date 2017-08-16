@@ -3,6 +3,16 @@ extends ../layout
 block content
   .container
     .columns
+      .column.is-one-third
+        .card
+          .card-image
+            figure.image
+              img(src=`${user.photo}`, alt='User photo')
+          .card-content
+            .media
+              .media-content
+                p.title.is-4= `${user.firstName} ${user.lastName}`
+                p.subtitle.is-6= `${moment(user.dateOfBirth).format('MMM. YYYY')} (${moment().diff(user.dateOfBirth, 'years')})`
       .column
         table.table.is-fullwidth
           tbody
@@ -15,16 +25,6 @@ block content
             tr
               th Date of birth
               td= moment(user.dateOfBirth).format('DD.MM.YYYY')
-
-        pre= JSON.stringify(user, 0, 2)
-
-      .column.is-one-third
-        .card
-          .card-image
-            figure.image
-              img(src=`${user.photo}`, alt='User photo')
-          .card-content
-            .media
-              .media-content
-                p.title.is-4= `${user.firstName} ${user.lastName}`
-                p.subtitle.is-6= `${moment(user.dateOfBirth).format('MMM. YYYY')} (${moment().diff(user.dateOfBirth, 'years')})`
+            tr
+              th Wallet Id
+              td= user.walletId
