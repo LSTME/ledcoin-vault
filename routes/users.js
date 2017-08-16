@@ -41,6 +41,13 @@ router.post('/:id', (req, res) => {
   }
 });
 
+router.get('/:id/enroll', (req, res) => {
+  const { dataSource } = req;
+  const user = dataSource.getUser(req.params.id)[0];
+  const enrollCode = '0001021020112233eefdfeff';
+  res.render('users/enroll', { user, enrollCode });
+});
+
 router.get('/:id', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id)[0];

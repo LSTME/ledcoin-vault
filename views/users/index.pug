@@ -19,6 +19,8 @@ block content
               a(href=`users/${user.$loki}`)= user.lastName
             td= user.walletId
             td
-              a(href=`users/${user.$loki}/edit`) Edit
+              a.button(href=`users/${user.$loki}/edit`) Edit
+              if user.walletId !== undefined
+                a.button(href=`users/${user.$loki}/enroll`) Enroll
 
     a.button.is-danger(href='users/clearConfirm') Remove all
