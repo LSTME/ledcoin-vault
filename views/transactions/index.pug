@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+  .container
+    table.table.is-fullwidth
+      thead
+        tr
+          th Created at
+          th User
+          th Type
+          th Target
+          th Coins
+      tbody
+        each transaction in transactions
+          - user = users[transaction.userId]
+          tr
+            td= moment(transaction.createdAt).format('DD.MM.YYYY HH:mm')
+            td= `${user.firstName} ${user.lastName}`
+            td= transaction.type
+            td
+              if transaction.type === 'bounty'
+                a(href=`/bounties/${transaction.targetId}`)
+                  = `${bounties[transaction.targetId].description} (${transaction.targetId})`
+              else if transaction.type === 'game'
+                - otherUser = users[transaction.targetId]
+                a(href=`/users/${transaction.targetId}`)
+                  = `${otherUser.firstName} ${otherUser.lastName} (${transaction.targetId})`
+              else if transaction.type === 'purchase'
+                = `product (${transaction.targetId})`
+            td= transaction.deltaCoin

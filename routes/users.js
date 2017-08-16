@@ -51,7 +51,8 @@ router.get('/:id/enroll', (req, res) => {
 router.get('/:id', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id)[0];
-  res.render('users/show', { user });
+  const transactions = dataSource.getTransactionsForUser(user.$loki);
+  res.render('users/show', { user, transactions });
 });
 
 module.exports = router;

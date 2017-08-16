@@ -1,0 +1,26 @@
+mixin timeline(transactions)
+  - start = 0
+  - total = transactions.reduce((sum, t) => sum + t.deltaCoin, start);
+  ul.timeline
+    li.timeline-header
+      span.tag.is-primary.is-large= `Now: ${total}`
+    for t in transactions
+      li.timeline-item(class=(t.deltaCoin > 0 ? 'is-success' : t.deltaCoin < 0 ? 'is-danger' : ''))
+        .timeline-marker
+        .timeline-content
+          p= moment(t.createdAt).format('ddd Do - HH:mm')
+          p.heading
+            span.delta
+              if t.deltaCoin > 0
+                = '+'
+              = t.deltaCoin
+            span -
+            span.target
+              if t.type === 'bounty'
+                a(href=`/bounties/${t.targetId}`)= `${t.type} (${t.targetId})`
+              else if t.type === 'game'
+                a(href=`/users/${t.targetId}`)= `${t.type} (${t.targetId})`
+              else if t.type === 'purchase'
+                = `${t.type} (${t.targetId})`
+    li.timeline-header
+      span.tag.is-primary.is-large= `Start: ${start}`

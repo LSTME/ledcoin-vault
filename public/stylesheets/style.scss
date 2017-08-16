@@ -1,8 +1,9 @@
 @import './variables';
 @import 'bulma/bulma';
+@import './modules/timeline';
 
 .navbar + .container {
-    margin-top: 5px;
+    margin-top: 2em;
 }
 
 .container.narrow {
@@ -11,4 +12,29 @@
 
 button.is-block {
     width: 100%;
+}
+
+.timeline .timeline-item {
+    padding-bottom: 0;
+
+    &::before {
+        top: calc(50% - 0.4rem);
+    }
+
+    .timeline-content {
+        padding: 0.3em 2em;
+        font-size: 11px;
+
+        .heading {
+            margin-bottom: 0;
+
+            span {
+                padding-right: 1em;
+            
+                &.delta {
+                    font-size: 1.3em;
+                }
+            }
+        } 
+    } 
 }

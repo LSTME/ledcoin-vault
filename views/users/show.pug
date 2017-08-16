@@ -13,6 +13,10 @@ block content
               .media-content
                 p.title.is-4= `${user.firstName} ${user.lastName}`
                 p.subtitle.is-6= `${moment(user.dateOfBirth).format('MMM. YYYY')} (${moment().diff(user.dateOfBirth, 'years')})`
+
+      .column.is-3
+        + timeline(transactions)
+
       .column
         table.table.is-fullwidth
           tbody
