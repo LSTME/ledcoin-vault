@@ -1,3 +1,7 @@
+mixin postLink(href, title)
+    form(method="post" action=href)
+        button&attributes(attributes)= title
+
 mixin field(key, label)
     - value = result ? result.value[key] : ''
     if result && result.error
@@ -17,3 +21,6 @@ html
   body
     include layout/head.pug
     block content
+
+    script(type="text/javascript" src='/javascripts/jquery-3.2.1.min.js')
+    script(type="text/javascript" src='/javascripts/app.js')
