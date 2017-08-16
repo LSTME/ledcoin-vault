@@ -8,6 +8,7 @@ block content
           th ID
           th First name
           th Last name
+          th
       tbody
         each user in users
           tr
@@ -15,5 +16,7 @@ block content
             td= user.firstName
             td
               a(href=`users/${user.$loki}`)= user.lastName
+            td
+              a(href=`users/${user.$loki}/edit`) Edit
 
     a.button.is-danger(href='users/clearConfirm') Remove all

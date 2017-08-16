@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  .container
+    - user = result.value
+
+    form(method='POST' action=`/users/${user.$loki}`)
+      p.title Edit user
+      include _fields
+      button.button.is-primary(type='submit') SAVE
