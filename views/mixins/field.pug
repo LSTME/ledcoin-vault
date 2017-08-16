@@ -1,4 +1,4 @@
-mixin field(key, label)
+mixin field(key, label, hint)
   - value = result ? result.value[key] : ''
   if result && result.error
     - error = result.error.details.find(e => e.path === key)
@@ -7,4 +7,6 @@ mixin field(key, label)
     label.label= label
     input.input(name=key type='text' value=value class=error ? 'is-danger' : '')
     if error
-      p.help.is-danger= error.message
+      p.help.is-danger= error.message.replace(key, label)
+    if hint
+      p.help= hint
