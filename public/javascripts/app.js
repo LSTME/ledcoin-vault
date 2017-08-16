@@ -5,7 +5,7 @@ $().ready(() => {
     const target = $(e);
     const code = target.data('ledcode');
     const data = code.match(/\w\w/g).map(m => parseInt(m, 16));
-    const box = target.find('.box');
+    const box = target.find('figure');
     const blinker = new Ledcode(box[0]);
 
     target.find('[data-ledcode-play]').click((_) => {
