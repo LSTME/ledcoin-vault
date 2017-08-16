@@ -1,5 +1,6 @@
 mixin postLink(href, title)
-    form(method="post" action=href)
+    form(method="post" action=href class!=attributes.formClass)
+        - attributes.formClass = undefined
         button&attributes(attributes)= title
 
 mixin field(key, label)
