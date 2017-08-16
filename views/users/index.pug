@@ -8,6 +8,7 @@ block content
           th ID
           th First name
           th Last name
+          th Wallet Id
           th
       tbody
         each user in users
@@ -16,6 +17,7 @@ block content
             td= user.firstName
             td
               a(href=`users/${user.$loki}`)= user.lastName
+            td= user.walletId
             td
               a(href=`users/${user.$loki}/edit`) Edit
 

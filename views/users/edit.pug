@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   .container
-    - user = result.value
+    - result = result ? result : {value: user}
 
     form(method='POST' action=`/users/${user.$loki}`)
       p.title Edit user
