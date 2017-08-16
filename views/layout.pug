@@ -1,18 +1,5 @@
-mixin postLink(href, title)
-    form(method="post" action=href class!=attributes.formClass)
-        - attributes.formClass = undefined
-        button&attributes(attributes)= title
-
-mixin field(key, label)
-    - value = result ? result.value[key] : ''
-    if result && result.error
-        - error = result.error.details.find(e => e.path === key)
-
-    .field
-        label.label= label
-        input.input(name=key type='text' value=value class=error ? 'is-danger' : '')
-        if error
-            p.help.is-danger= error.message
+include mixins/field
+include mixins/postLink
 
 doctype html
 html

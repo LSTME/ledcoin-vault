@@ -1,0 +1,4 @@
+mixin postLink(href, title)
+  form(method="post" action=href class!=attributes.formClass)
+    - attributes.formClass = undefined
+    button&attributes(attributes)= title
