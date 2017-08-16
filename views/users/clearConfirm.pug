@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  .container.narrow
+    .message.is-danger
+      .message-header
+        strong Danger! 
+      .message-body
+        p Are you sure you want to remove all users?
+
+    .columns
+      .column
+        a.button.is-default.is-block(href="/users") Cancel
+      .column
+        +postLink('/users/clear', 'Remove all')(data-confirm="Are you sure?" formClass="is-fullwidth").button.is-danger.is-block

@@ -4,3 +4,11 @@
 .navbar + .container {
     margin-top: 5px;
 }
+
+.container.narrow {
+    max-width: 500px;
+}
+
+button.is-block {
+    width: 100%;
+}
