@@ -32,4 +32,19 @@ router.post('/create', (req, res, next) => {
   }
 });
 
+router.get('/secret/:key', (req, res) => {
+  const { dataSource } = req;
+  const bounty = dataSource.getBountyByKey(req.params.key);
+  const bountyCodeData = 'fff000';
+  res.render('bounties/secret', { bounty, bountyCodeData });
+});
+
+router.get('/:id', (req, res) => {
+  const { dataSource } = req;
+  const bounty = dataSource.getBounty(req.params.id);
+  console.log(req.hostname);
+  bounty.url = bounty.urlKey ? `/bounties/secret/${bounty.urlKey}` : undefined;
+  res.render('bounties/show', { bounty });
+});
+
 module.exports = router;

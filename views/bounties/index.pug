@@ -9,12 +9,15 @@ block content
           th Description
           th Value
           th Code
+          th Target
       tbody
         each bounty in bounties
           tr
             td= bounty.$loki
-            td= bounty.description
+            td
+              a(href=`/bounties/${bounty.$loki}`)= bounty.description
             td= bounty.value
             td= bounty.code
+            td= bounty.target
 
     a.button.is-success(href="/bounties/new") New
