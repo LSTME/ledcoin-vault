@@ -4,6 +4,9 @@
     "browser": true,
     "jquery": true
   },
+  "globals": {
+    "Ledcode": true
+  },
   "rules": {
     "no-console": 0,
     "max-len": "off",
