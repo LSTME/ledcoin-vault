@@ -5,7 +5,7 @@ mixin field(key, label, hint)
 
   .field
     label.label= label
-    input.input(name=key type='text' value=value class=error ? 'is-danger' : '')
+    input.input(name=key type='text' value=value class=error ? 'is-danger' : '')&attributes(attributes)
     if error
       p.help.is-danger= error.message.replace(key, label)
     if hint
