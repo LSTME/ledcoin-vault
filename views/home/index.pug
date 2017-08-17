@@ -1,9 +1,8 @@
-extends ../layout
+extends ../blank
 
 block content
-  section.hero.is-large.is-primary.is-bold
+  section.hero.is-fullheight.is-primary.is-bold
     .hero-body
-      .container
-        h1.title Ledcoin vault
-        h2.sub-title Welcome to vault
-          
+      .container.has-text-centered
+        a(href='/users')
+          img(src='images/logo-ledcoin.svg')
