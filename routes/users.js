@@ -26,16 +26,13 @@ router.get('/:id/edit', (req, res) => {
 
 router.post('/:id', (req, res) => {
   const ds = req.dataSource;
-
+  const user = ds.getUser(req.params.id)[0];
   const changes = _.pick(req.body, ['firstName', 'lastName', 'photo', 'dateOfBirth', 'walletId']);
   const result = ds.schema.validate(changes, ds.schema.user);
-  console.log(result);
 
   if (result.error) {
-    const user = ds.getUser(req.params.id)[0];
     res.render('users/edit', { user, result });
   } else {
-    const user = ds.getUser(req.params.id)[0];
     ds.saveUser(_.merge(user, changes));
     res.redirect('/users');
   }
