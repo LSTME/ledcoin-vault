@@ -21,6 +21,10 @@ button.is-block {
         top: calc(50% - 0.4rem);
     }
 
+    &.is-without-marker::before {
+      display: none;
+    }
+
     .timeline-content {
         padding: 0.3em 2em;
         font-size: 11px;
@@ -30,11 +34,11 @@ button.is-block {
 
             span {
                 padding-right: 1em;
-            
+
                 &.delta {
                     font-size: 1.3em;
                 }
             }
-        } 
-    } 
+        }
+    }
 }

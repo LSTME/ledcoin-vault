@@ -1,0 +1,12 @@
+- lines = terminal.log.slice().reverse()
+ul.timeline
+  for line in lines
+    li.timeline-item(class=(line.direction === 'out' ? 'is-info' : 'is-success'))
+      .timeline-content
+        p= moment(line.time).format('HH:mm:ss.SSS')
+        p.heading
+          span= line.method + ':'
+          span= line.event
+    li.timeline-item.is-without-marker(class=(line.direction === 'out' ? 'is-info' : 'is-success'))
+      .timeline-content
+        pre(style='font-size: 10px')= JSON.stringify(line.data, 0, 2)

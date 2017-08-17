@@ -1,0 +1,117 @@
+extends ../layout
+
+block content
+  .container
+    if terminal
+      .columns
+        .column.is-one-quarter
+          h1.title= terminal.key
+          hr
+
+          form(method='TCP')
+            .field
+              label.label(for='message') Send message to serial port:
+              .control
+                textarea.textarea(type='text' name='message')
+            .field
+              button.button(type='submit' name='protocol' value='TCP') Send
+
+          br
+
+          form(method='WEBSOCKET')
+            input(type='hidden' name='event' value='pin:list')
+            .field
+              label.label List pins of RPI (pin:list)
+              .control
+                button.button(type='submit') Send
+
+          br
+
+          form(method='WEBSOCKET')
+            input(type='hidden' name='event' value='pin:read')
+            .field
+              label.label List one pin of RPI (pin:read)
+              .control
+                input.input(type='number' name='num' placeholder='Pin number')
+            .field
+              button.button(type='submit' name='message') Send
+
+          br
+
+          form(method='WEBSOCKET')
+            input(type='hidden' name='event' value='pin:write')
+            .field
+              label.label Write one pin of RPI (pin:write)
+              .control
+                input.input(type='number' name='num' placeholder='Pin number')
+            .field
+              .control
+                input.input(type='number' name='value' placeholder='Pin value')
+            .field
+              button.button(type='submit' name='message') Send
+
+        .column
+          .card
+            .card-header
+              p.card-header-title Terminal log
+            .card-content#websocketLog(data-url=`/terminals/${terminal.key}/log`)
+              //- iframe#websocketLog(src=`/terminals/${terminal.key}/log` style="width: 100%; min-height: 600px")
+    else
+      + message('Terminal with specified key not found', 'Not found', 'info')
+
+
+block scripts
+  script.
+    const refreshLog = () => {
+      const log = $('#websocketLog');
+      $.get(log.data('url'))
+        .done(data => log.html(data))
+        .fail(_ => log.html('Could not load log. Terminal probably disconnected.'));
+      return false;
+    };
+
+    refreshLog();
+    setInterval(refreshLog, 1000);
+
+    $('form[method=WEBSOCKET]').submit((e) => {
+      const form = $(e.target);
+      const body = {
+        protocol: 'WEBSOCKET',
+        event: '',
+      };
+
+      $(e.target).serializeArray().forEach(field => {
+        if(field.name === 'event') {
+          body.event = field.value;
+        } else {
+          body.data = body.data || {};
+          body.data[field.name] = Number(field.value);
+        }
+      });
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });
+
+    $('form[method=TCP]').submit((e) => {
+      const form = $(e.target);
+      const body = {
+        protocol: 'TCP',
+        message: form.find('[name="message"]').val(),
+      };
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });
