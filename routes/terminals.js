@@ -19,7 +19,6 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id', (req, res) => {
   const terminal = req.context.terminals[req.params.id];
-  console.log(req.body);
   if (terminal) {
     switch (req.body.protocol) {
       case 'TCP':
