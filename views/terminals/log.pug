@@ -1,4 +1,5 @@
 include ../mixins/message
+include ../mixins/eeprom
 
 if terminal
   - lines = terminal.log.slice().reverse()
@@ -9,10 +10,17 @@ if terminal
           p= moment(line.time).format('HH:mm:ss.SSS')
           p.heading
             span= line.method + ':'
-            span= line.event
+            if line.meta
+              span= line.meta.command
+              span= line.meta.args
       li.timeline-item.is-without-marker(class=(line.direction === 'out' ? 'is-info' : 'is-success'))
         .timeline-content
-          pre(style='font-size: 10px')
-            = JSON.stringify(line.data, 0, 2)
+          if line.data && line.data.constructor && line.data.constructor.name === 'Buffer'
+            + eeprom(line.data)
+          else if line.meta && line.meta.commandId === 14 && line.direction === 'in'
+            + eeprom(line.data)
+          else
+            pre(style='font-size: 10px')
+              = JSON.stringify(line.data, 0, 2)
 else
   +message('Terminal not found', '', 'danger')

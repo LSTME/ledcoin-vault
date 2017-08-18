@@ -1,0 +1,5 @@
+mixin eeprom(buffer)
+  - pad = (n, i = 3) => { const s = ''+n; return ('     '+s).substring(s.length + 5 - i); }
+  - s = pad(0, 5)+ ' | '
+  - for (const [i, c] of buffer.entries()) { if (i>0 && i%24 === 0){s += `\n${pad(i, 5)} | `;} else if (i>0 && i%4 === 0){s += '   '}; s += pad(c) + ' '; }
+  pre= s
