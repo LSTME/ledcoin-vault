@@ -6,11 +6,5 @@ block content
 
     form(method='POST' action=`/bounties/${bounty.$loki}`)
       p.title Edit bounty
-
-      +field('description', 'Description')
-      +field('value', 'Value')(readonly=true value=bounty.value)
-      +field('code', 'Code')
-      +field('target', 'Target wallet ID', 'Use 255 for any walletId')
-      +field('urlKey', 'URL key', 'Bounty will be available at /bounties/secret/:urlKey')
-
+      include _fields
       button.button.is-primary(type='submit') SAVE
