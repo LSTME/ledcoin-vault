@@ -120,19 +120,19 @@ LedcoinProtocol.prototype.WriteEEPROM = function (address, data) {
   return this.BuildRequest(this.Commands.WriteEEPROM, body);
 };
 
-LedcoinProtocol.prototype.SetBounty = function (bountyId, recipient, value, signature) {
+LedcoinProtocol.prototype.SetBounty = function (bountyId, recipient, value) {
   const body = new Uint8ClampedArray([
     BYTE & (bountyId >> 8),
     BYTE & bountyId,
     BYTE & recipient,
     BYTE & value,
-    BYTE & (signature >> 8),
-    BYTE & signature,
   ]);
+
+  const sig = crypto.M(recipient, value, bountyId);
+  body[4] = BYTE & (sig >> 8);
+  body[5] = BYTE & sig;
+
   return this.BuildRequest(this.Commands.SetBounty, body);
 };
-
-
-
 
 module.exports = LedcoinProtocol;
