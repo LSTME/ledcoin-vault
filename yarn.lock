@@ -3727,7 +3727,7 @@ socket.io-adapter@~1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-1.1.1.tgz#2a805e8a14d6372124dd9159ad4502f8cb07f06b"
 
-socket.io-client@^2.0.3, socket.io-client@~2.0.2:
+socket.io-client@~2.0.2:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-2.0.3.tgz#6caf4aff9f85b19fd91b6ce13d69adb564f8873b"
   dependencies:
@@ -4245,6 +4245,13 @@ write@^0.2.1:
   resolved "https://registry.yarnpkg.com/write/-/write-0.2.1.tgz#5fc03828e264cea3fe91455476f7a3c566cb0757"
   dependencies:
     mkdirp "^0.5.1"
+
+ws@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.1.0.tgz#8afafecdeab46d572e5397ee880739367aa2f41c"
+  dependencies:
+    safe-buffer "~5.1.0"
+    ultron "~1.1.0"
 
 ws@~2.3.1:
   version "2.3.1"

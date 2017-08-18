@@ -12,43 +12,36 @@ block content
             .field
               label.label(for='message') Send message to serial port:
               .control
-                textarea.textarea(type='text' name='message')
+                .select
+                  select(name='command')
+                    for cmd in commands
+                      option(value=cmd)= cmd
+            .field
+              .control
+                textarea.textarea(type='text' name='message' placeholder='0\n2,15,255')
+                p.help Separate values with ',', arguments with '\n'
             .field
               button.button(type='submit' name='protocol' value='TCP') Send
 
           br
 
-          form(method='WEBSOCKET')
-            input(type='hidden' name='event' value='pin:list')
-            .field
-              label.label List pins of RPI (pin:list)
-              .control
-                button.button(type='submit') Send
+          + message(undefined, 'Red led', 'danger')
+            form(method='WEBSOCKET')
+              input(type='hidden' name='led' value='red')
+              .field.has-addons
+                .control
+                  button.button.is-danger.is-outlined(type='submit' value="high") High
+                .control
+                  button.button.is-danger.is-outlined(type='submit' value="low") Low
 
-          br
-
-          form(method='WEBSOCKET')
-            input(type='hidden' name='event' value='pin:read')
-            .field
-              label.label List one pin of RPI (pin:read)
-              .control
-                input.input(type='number' name='num' placeholder='Pin number')
-            .field
-              button.button(type='submit' name='message') Send
-
-          br
-
-          form(method='WEBSOCKET')
-            input(type='hidden' name='event' value='pin:write')
-            .field
-              label.label Write one pin of RPI (pin:write)
-              .control
-                input.input(type='number' name='num' placeholder='Pin number')
-            .field
-              .control
-                input.input(type='number' name='value' placeholder='Pin value')
-            .field
-              button.button(type='submit' name='message') Send
+          + message(undefined, 'Red led', 'success')
+            form(method='WEBSOCKET')
+              input(type='hidden' name='led' value='green')
+              .field.has-addons
+                .control
+                  button.button.is-success.is-outlined(type='submit' value="high") High
+                .control
+                  button.button.is-success.is-outlined(type='submit' value="low") Low
 
         .column
           .card
@@ -73,21 +66,15 @@ block scripts
     refreshLog();
     setInterval(refreshLog, 1000);
 
-    $('form[method=WEBSOCKET]').submit((e) => {
-      const form = $(e.target);
+    $('form[method=WEBSOCKET] [type="submit"]').click((e) => {
+      const form = $(e.target.form);
       const body = {
         protocol: 'WEBSOCKET',
-        event: '',
-      };
-
-      $(e.target).serializeArray().forEach(field => {
-        if(field.name === 'event') {
-          body.event = field.value;
-        } else {
-          body.data = body.data || {};
-          body.data[field.name] = Number(field.value);
+        message: {
+          led: form.find('[name="led"]').val(),
+          value: e.target.value,
         }
-      });
+      };
 
       $.ajax({
         contentType: 'application/json',
@@ -103,6 +90,7 @@ block scripts
       const form = $(e.target);
       const body = {
         protocol: 'TCP',
+        command: form.find('[name="command"]').val(),
         message: form.find('[name="message"]').val(),
       };
 

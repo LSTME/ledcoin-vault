@@ -1,6 +1,9 @@
+/* eslint no-case-declarations: 0 */
 const express = require('express');
+const Proto = require('../utils/LedcoinProtocol');
 
 const router = express.Router();
+const proto = new Proto();
 
 router.get('/', (req, res) => {
   const terminals = req.context.terminals;
@@ -14,7 +17,7 @@ router.get('/:id/log', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const terminal = req.context.terminals[req.params.id];
-  res.render('terminals/show', { terminal });
+  res.render('terminals/show', { terminal, commands: Object.keys(proto.Commands) });
 });
 
 router.post('/:id', (req, res) => {
@@ -22,16 +25,24 @@ router.post('/:id', (req, res) => {
   if (terminal) {
     switch (req.body.protocol) {
       case 'TCP':
-        terminal.tell(req.body.message);
+        const cmd = proto.Commands[req.body.command];
+        if (cmd) {
+          const args = req.body.message.split('\n').map(r =>
+            r.split(',').map(v => Number(v)),
+          );
+          const buffer = proto[req.body.command](...args);
+          terminal.tell(buffer);
+        }
         break;
       case 'WEBSOCKET':
-        terminal.emit(req.body.event, req.body.data);
+        terminal.send(req.body.message);
         break;
       default:
         break;
     }
   }
-  res.render('terminals/show', { terminal });
+
+  res.json({ status: 'ok' });
 });
 
 module.exports = router;
