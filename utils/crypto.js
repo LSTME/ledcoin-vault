@@ -1,7 +1,9 @@
 /* eslint no-bitwise: 0, no-plusplus: 0 */
 
 // bytes are handled by & 0xFF
+const BYTE = 0xFF;
 // ushorts are handled by & 0xFFFF
+const USHORT = 0xFFFF;
 
 const Crypto = {
   /**
@@ -11,20 +13,20 @@ const Crypto = {
    * @returns {ushort} result
    */
   M(a, b, c) {
-    const usA = a & 0xFF;
-    const usB = b & 0xFF;
-    const usC = c & 0xFF;
-    let usRndState = ((usA << 8) | usB) & 0xFFFF;
+    const usA = a & BYTE;
+    const usB = b & BYTE;
+    const usC = c & BYTE;
+    let usRndState = ((usA << 8) | usB) & USHORT;
     let y = usC;
     let t = 0;
 
     console.log(usRndState, y);
 
     for (let i = 0; i < 8; i++) {
-      t = (y ^ (y << 5)) & 0xFFFF;
+      t = (y ^ (y << 5)) & USHORT;
       y = usRndState;
-      const usX = (usRndState ^ (usRndState >> 1)) & 0xFFFF;
-      usRndState = (usX ^ ((t ^ (t >> 3)) & 0xFFFF)) & 0xFFFF;
+      const usX = (usRndState ^ (usRndState >> 1)) & USHORT;
+      usRndState = (usX ^ ((t ^ (t >> 3)) & USHORT)) & USHORT;
     }
 
     return usRndState;
