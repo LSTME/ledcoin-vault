@@ -1,9 +1,7 @@
 /* eslint no-case-declarations: 0 */
 const express = require('express');
-const Proto = require('../utils/LedcoinProtocol');
 
 const router = express.Router();
-const proto = new Proto();
 
 router.get('/', (req, res) => {
   const terminals = req.context.terminals;
@@ -17,7 +15,7 @@ router.get('/:id/log', (req, res) => {
 
 router.get('/:id', (req, res) => {
   const terminal = req.context.terminals[req.params.id];
-  res.render('terminals/show', { terminal, commands: Object.keys(proto.Commands) });
+  res.render('terminals/show', { terminal, commands: terminal.availableCommands() });
 });
 
 router.post('/:id', (req, res) => {
@@ -25,14 +23,12 @@ router.post('/:id', (req, res) => {
   if (terminal) {
     switch (req.body.protocol) {
       case 'TCP':
-        const cmd = proto.Commands[req.body.command];
-        if (cmd) {
-          const args = req.body.message.split('\n').map(r =>
-            r.split(',').map(v => Number(v)),
-          );
-          const buffer = proto[req.body.command](...args);
-          terminal.tell(buffer);
-        }
+        const args = req.body.message.split('\n').map(r =>
+          r.split(',').map(v => Number(v)),
+        );
+        terminal.tell(req.body.command, args)
+          .then(response => console.log('got response to', req.body.command, response))
+          .catch(error => console.error(error));
         break;
       case 'WEBSOCKET':
         terminal.send(req.body.message);
