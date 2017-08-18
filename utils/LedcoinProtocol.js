@@ -9,7 +9,7 @@ function LedcoinProtocol() {
     GetAuth: 1,
     SetAuth: 2,
     GetBalance: 3,
-    SetBalance: 4,
+    EditBalance: 4,
     GetLog: 5,
     ShrinkLog: 6,
     SetReadyToGame: 7,
@@ -75,9 +75,9 @@ LedcoinProtocol.prototype.GetBalance = function (counterId) {
   return this.BuildRequest(this.Commands.GetBalance, body);
 };
 
-LedcoinProtocol.prototype.SetBalance = function (operationType, value) {
+LedcoinProtocol.prototype.EditBalance = function (operationType, value) {
   const body = new Uint8ClampedArray([operationType, value]);
-  return this.BuildRequest(this.Commands.SetBalance, body);
+  return this.BuildRequest(this.Commands.EditBalance, body);
 };
 
 LedcoinProtocol.prototype.GetLog = function (dataId) {
