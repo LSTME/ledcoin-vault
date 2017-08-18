@@ -121,12 +121,11 @@ LedcoinProtocol.prototype.WriteEEPROM = function (address, data) {
 };
 
 LedcoinProtocol.prototype.SetBounty = function (bountyId, recipient, value) {
-  const body = new Uint8ClampedArray([
-    BYTE & (bountyId >> 8),
-    BYTE & bountyId,
-    BYTE & recipient,
-    BYTE & value,
-  ]);
+  const body = new Uint8ClampedArray(6);
+  body[0] = BYTE & (bountyId >> 8);
+  body[1] = BYTE & bountyId;
+  body[2] = BYTE & recipient;
+  body[3] = BYTE & value;
 
   const sig = crypto.M(recipient, value, bountyId);
   body[4] = BYTE & (sig >> 8);

@@ -1,7 +1,9 @@
 const express = require('express');
 const _ = require('lodash');
+const Proto = require('../utils/LedcoinProtocol');
 
 const router = express.Router();
+const proto = new Proto();
 
 // router.get('/:id', (req, res, next) => {
 //   const { dataSource } = req;
@@ -36,7 +38,11 @@ router.post('/create', (req, res) => {
 router.get('/secret/:key', (req, res) => {
   const { dataSource } = req;
   const bounty = dataSource.getBountyByKey(req.params.key);
-  const bountyCodeData = 'fff000';
+  const bountyCodeData = proto.SetBounty(
+    Number(bounty.$loki), // ID
+    Number(bounty.target), // Recipient
+    Number(bounty.value), // Value
+  ).toJSON().data;
   res.render('bounties/secret', { bounty, bountyCodeData });
 });
 
