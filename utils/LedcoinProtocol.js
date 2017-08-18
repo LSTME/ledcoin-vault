@@ -48,7 +48,7 @@ function LedcoinProtocol() {
     body.forEach((v, i) => { res[i + 1] = v; });
     res[res.length - 1] = crc.checksum(res.slice(0, -1));
 
-    return res;
+    return Buffer(res);
   };
 }
 
