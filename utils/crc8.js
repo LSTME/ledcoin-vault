@@ -1,36 +1,38 @@
-// "Class" for calculating CRC8 checksums...
-class CRC8 {
-  constructor() {
-    this.table = CRC8.generateTable(0x9b);
-  }
+/* eslint no-bitwise: 0, no-plusplus: 0 */
 
-  // Returns the 8-bit checksum given an array of byte-sized numbers
-  checksum(byte_array) {
-    let c = 0;
-    for (let i = 0; i < byte_array.length; i++) {
-      c = this.table[(c ^ byte_array[i]) % 256];
-    }
-    return c;
-  }
+// bytes are handled by & 0xFF
+const BYTE = 0xFF;
 
-  // returns a lookup table byte array given one of the values from CRC8.POLY
-  static generateTable(polynomial) {
-    const csTable = []; // 256 max len byte array
+const CRC = {
+  checksum(byteArray) {
+    // const byte CRC8POLY = 0x9B;
+    const CRC8POLY = 0x9B;
+    // byte crc = 0;
+    let crc = 0;
 
-    for (let i = 0; i < 256; ++i) {
-      let curr = i;
-      for (let j = 0; j < 8; ++j) {
-        if ((curr & 0x80) !== 0) {
-          curr = ((curr << 1) ^ polynomial) % 256;
-        } else {
-          curr = (curr << 1) % 256;
+    // for (byte i = 0; i < data.Length; i++)
+    for (let i = 0; i < byteArray.length; i++) {
+      let b = byteArray[i] & BYTE;
+
+      for (let j = 0; j < 8; j++) {
+        const feedbackBit = (crc ^ b) & 0x01;
+
+        if (feedbackBit === 0x01) {
+          crc = (crc ^ CRC8POLY) & BYTE;
         }
+
+        crc = ((crc >> 1) & 0x7f) & BYTE;
+
+        if (feedbackBit === 0x01) {
+          crc = (crc | 0x80) & BYTE;
+        }
+
+        b = (b >> 1) & BYTE;
       }
-      csTable[i] = curr;
     }
 
-    return csTable;
-  }
-}
+    return crc;
+  },
+};
 
-module.exports = CRC8;
+module.exports = CRC;
