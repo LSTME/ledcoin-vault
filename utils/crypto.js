@@ -20,8 +20,6 @@ const Crypto = {
     let y = usC;
     let t = 0;
 
-    console.log(usRndState, y);
-
     for (let i = 0; i < 8; i++) {
       t = (y ^ (y << 5)) & USHORT;
       y = usRndState;
@@ -41,7 +39,7 @@ const Crypto = {
   },
 };
 
-console.log(`M(255, 3, 1): ${Crypto.M(255, 3, 1)} should be 10109 {39, 125}`);
-console.log(`T(123): ${Crypto.T(123)} should be 78`);
+// console.log(`M(255, 3, 1): ${Crypto.M(255, 3, 1)} should be 10109 {39, 125}`);
+// console.log(`T(123): ${Crypto.T(123)} should be 78`);
 
 module.exports = Crypto;
