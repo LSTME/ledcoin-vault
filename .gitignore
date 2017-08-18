@@ -36,3 +36,4 @@ public/stylesheets/*.css
 .env
 data/*
 !data/.keep
+*.exe
