@@ -24,7 +24,9 @@ router.post('/:id', (req, res) => {
     switch (req.body.protocol) {
       case 'TCP':
         const args = req.body.message.split('\n').map(r =>
-          r.split(',').map(v => Number(v)),
+          (r.indexOf(',') > 0 ?
+            r.split(',').map(v => Number(v)) :
+            Number(r)),
         );
         terminal.tell(req.body.command, args)
           .then(response => console.log('got response to', req.body.command, response))

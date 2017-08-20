@@ -8,6 +8,7 @@ function LedcoinProtocol() {
   this.Commands = {
     GetAuth: 1,
     SetAuth: 2,
+    DeAuth: 2,
     GetBalance: 3,
     EditBalance: 4,
     GetLog: 5,
@@ -61,6 +62,14 @@ LedcoinProtocol.prototype.GetAuth = function (callerId, targetChallenge) {
   return this.BuildRequest(this.Commands.GetAuth, body);
 };
 
+LedcoinProtocol.prototype.IsValid = function (callerId, targetId, targetChallenge, signature) {
+  const correct = crypto.M(callerId, targetId, targetChallenge);
+  console.log((correct >> 8) & 0xFF, correct & 0xFF);
+  console.log(`IsValid(${callerId}, ${targetId}, ${targetChallenge}) === ${signature}`);
+  console.log(`${signature} === ${correct} ? `, signature === correct);
+  return signature === correct;
+};
+
 LedcoinProtocol.prototype.SetAuth = function (callerId, callerSignature) {
   const body = new Uint8ClampedArray([
     callerId,
@@ -68,6 +77,13 @@ LedcoinProtocol.prototype.SetAuth = function (callerId, callerSignature) {
     BYTE & callerSignature,
   ]);
   return this.BuildRequest(this.Commands.SetAuth, body);
+};
+
+LedcoinProtocol.prototype.DeAuth = function (callerId) {
+  const body = new Uint8ClampedArray([
+    callerId, 0, 0,
+  ]);
+  return this.BuildRequest(this.Commands.DeAuth, body);
 };
 
 LedcoinProtocol.prototype.GetBalance = function (counterId) {
