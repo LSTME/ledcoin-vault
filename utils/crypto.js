@@ -15,7 +15,7 @@ const Crypto = {
   M(a, b, c) {
     const usA = a & BYTE;
     const usB = b & BYTE;
-    const usC = c & BYTE;
+    const usC = c & USHORT;
     let usRndState = ((usA << 8) | usB) & USHORT;
     let y = usC;
     let t = 0;
@@ -39,6 +39,13 @@ const Crypto = {
   },
 };
 
+// console.log(`0, 2, 200: ${Crypto.M(0, 2, 200)}`);
+// console.log(`0, 2, 250: ${Crypto.M(0, 2, 250)}`);
+// console.log(`0, 2, 255: ${Crypto.M(0, 2, 255)}`);
+// console.log(`0, 2, 256: ${Crypto.M(0, 2, 256)}`);
+// console.log(`0, 2, 257: ${Crypto.M(0, 2, 257)}`);
+// console.log(`0, 2, 300: ${Crypto.M(0, 2, 300)}`);
+// console.log(`0, 2, 400: ${Crypto.M(0, 2, 400)}`);
 // console.log(`M(255, 3, 1): ${Crypto.M(255, 3, 1)} should be 10109 {39, 125}`);
 // console.log(`T(123): ${Crypto.T(123)} should be 78`);
 
