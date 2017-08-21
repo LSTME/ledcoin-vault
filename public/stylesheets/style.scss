@@ -15,6 +15,7 @@ button.is-block {
 }
 
 .timeline .timeline-item {
+    justify-content: space-between;
     padding-bottom: 0;
 
     &::before {
@@ -23,6 +24,13 @@ button.is-block {
 
     &.is-without-marker::before {
       display: none;
+    }
+
+    .delete-button {
+      visibility: hidden;
+      position: absolute;
+      top: 0.3em;
+      right: 0;
     }
 
     .timeline-content {
@@ -41,4 +49,16 @@ button.is-block {
             }
         }
     }
+
+    &:hover .delete-button {
+      visibility: visible;
+    }
 }
+
+.timeline-item {
+  .timeline-content hr {
+    margin: 0.3em 0;
+  }
+}
+
+

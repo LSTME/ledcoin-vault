@@ -11,4 +11,10 @@ router.get('/', (req, res) => {
   res.render('transactions/index', { transactions, users, bounties });
 });
 
+router.post('/:id/delete', (req, res) => {
+  const { dataSource } = req;
+  dataSource.removeTransaction(req.params.id);
+  res.redirect('back');
+});
+
 module.exports = router;
