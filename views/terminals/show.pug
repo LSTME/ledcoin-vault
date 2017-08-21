@@ -8,6 +8,15 @@ block content
           h1.title.is-4= terminal.key
           hr
 
+          form#setId
+            input(type='hidden' name='procedure' value='setId')
+            .field
+              label.label(for='id') Set WalletId:
+              .control
+                input.input(type='number' name="id")
+            .field
+              button.button(type='submit' name='protocol' value='TCP') Send
+
           form(method='TCP')
             .field
               label.label(for='message') Send message to serial port:
@@ -73,6 +82,24 @@ block scripts
 
     refreshLog();
     setInterval(refreshLog, 1000);
+
+    $('#setId [type="submit"]').click((e) => {
+      const form = $(e.target.form);
+      const body = {
+        protocol: 'TCP',
+        procedure: form.find('[name="procedure"]').val(),
+        id: form.find('[name="id"]').val(),
+      };
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });
 
     $('form[method=WEBSOCKET] [type="submit"]').click((e) => {
       const form = $(e.target.form);

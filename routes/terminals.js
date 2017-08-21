@@ -23,14 +23,21 @@ router.post('/:id', (req, res) => {
   if (terminal) {
     switch (req.body.protocol) {
       case 'TCP':
-        const args = req.body.message.split('\n').map(r =>
-          (r.indexOf(',') > 0 ?
-            r.split(',').map(v => Number(v)) :
-            Number(r)),
-        );
-        terminal.tell(req.body.command, args)
-          .then(response => console.log('got response to', req.body.command, response))
-          .catch(error => console.error(error));
+        if (req.body.procedure) {
+          terminal.tell('GetAuth', [0])
+            .then(() => terminal.tell('WriteEEPROM', [1, [req.body.id]]))
+            .then(() => terminal.tell('DeAuth', [0], false))
+            .catch(e => console.log('error running procedure', e));
+        } else {
+          const args = req.body.message.split('\n').map(r =>
+            (r.indexOf(',') > 0 ?
+              r.split(',').map(v => Number(v)) :
+              Number(r)),
+          );
+          terminal.tell(req.body.command, args)
+            .then(response => console.log('got response to', req.body.command, response))
+            .catch(error => console.error(error));
+        }
         break;
       case 'WEBSOCKET':
         terminal.send(req.body.message);
