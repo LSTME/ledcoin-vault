@@ -48,7 +48,7 @@ router.get('/:id/enroll', (req, res) => {
 router.get('/:id', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id)[0];
-  const transactions = dataSource.getTransactionsForUser(user.$loki);
+  const transactions = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
   res.render('users/show', { user, transactions });
 });
 

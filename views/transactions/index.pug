@@ -15,7 +15,7 @@ block content
           - user = users[transaction.userId]
           tr
             td= moment(transaction.createdAt).format('DD.MM.YYYY HH:mm')
-            td= `${user.firstName} ${user.lastName}`
+            td= transaction.walletId
             td= transaction.type
             td
               if transaction.type === 'bounty'
