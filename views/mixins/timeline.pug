@@ -17,16 +17,7 @@ mixin timeline(transactions)
                 = '+'
               = t.deltaCoin
             span -
-            if adminLayout
-              span.target
-                if t.type === 'bounty'
-                  a(href=`/bounties/${t.targetId}`)= `${t.type} (${t.targetId})`
-                else if t.type === 'game'
-                  a(href=`/users/${t.targetId}`)= `${t.type} (${t.targetId})`
-                else if t.type === 'purchase'
-                  = `${t.type} (${t.targetId})`
-            else
-              span.target= t.type
+            span.target= t.type
 
           p
             = t.description
