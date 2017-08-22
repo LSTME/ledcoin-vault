@@ -50,14 +50,7 @@ router.post('/:id', (req, res) => {
   // make sure username is uniq
   const isUsernameUniq = ds.getUsers({ username: changes.username, $loki: { $ne: user.$loki } }).length === 0;
   if (!isUsernameUniq) {
-    result.error = result.error || {};
-    result.error.details = result.error.details || [];
-    result.error.details.push({
-      message: '"username" must be uniq',
-      path: 'username',
-      type: 'any.uniq',
-      context: {},
-    });
+    ds.addJoiError(result, 'username', 'any.uniq', 'must be uniq');
   }
 
   if (req.body.password.length > 0) {
