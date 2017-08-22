@@ -57,6 +57,17 @@ block content
                   button.button.is-primary.is-outlined(type='submit') Add
 
         .column
+          if adminLayout
+            form(action=`/users/${user.$loki}/sync` method='POST')
+              .field.has-addons.is-pulled-right
+                .control
+                  span.select
+                    select(name="terminal")
+                      for term in terminals
+                        option(value=term)= term
+                .control
+                  button.button.is-primary.is-outlined(type='submit') Update wallet
+
           + timeline(transactions)
 
     else

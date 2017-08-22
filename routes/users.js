@@ -1,3 +1,4 @@
+/* eslint no-bitwise: 0 */
 const express = require('express');
 const _ = require('lodash');
 
@@ -99,6 +100,35 @@ router.post('/', (req, res) => {
   }
 });
 
+router.post('/:id/sync', (req, res) => {
+  const ds = req.dataSource;
+  const user = ds.getUser(req.params.id);
+  const term = req.context.terminals[req.body.terminal];
+  if (term && user) {
+    term.toggleRedLed(true);
+    term.tell('GetAuth', [0])
+      .then((resp) => {
+        if (resp[0] === user.walletId) {
+          console.log('Correct wallet ID, SYNCING');
+          const value = ds.getTransactionsForWallet(user.walletId).reduce((acc, t) => acc + Number(t.deltaCoin), 0);
+          return term.tell('WriteEEPROM', [2, [(value >> 8) & 0xFF, value & 0xFF]]);
+        }
+        return false;
+      })
+      .then((res) => {
+        term.toggleRedLed(false);
+        return term.tell('DeAuth', [0], false);
+      })
+      .catch((e) => {
+        console.log('error running procedure', e);
+        term.toggleRedLed(false);
+        return term.tell('DeAuth', [0], false);
+      });
+  }
+
+  res.redirect(`/users/${req.params.id}`);
+});
+
 router.get('/:id/edit', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id);
@@ -166,7 +196,7 @@ router.get('/:id', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id);
   const transactions = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
-  res.render('users/show', { user, transactions, adminLayout: true });
+  res.render('users/show', { user, transactions, adminLayout: true, terminals: Object.keys(req.context.terminals) || [] });
 });
 
 module.exports = router;
