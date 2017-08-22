@@ -32,7 +32,7 @@ router.post('/:id/change', (req, res) => {
     walletId: Number(user.walletId),
     deltaCoin: Number(req.body.deltaCoin),
     description: req.body.description,
-    type: 'change',
+    type: req.body.type,
     targetId: null,
   });
   res.redirect(`/users/${req.params.id}`);

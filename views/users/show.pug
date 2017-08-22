@@ -46,8 +46,13 @@ block content
                   p.help Comment is visible to everyone
               .field.has-addons
                 .control
+                  span.select
+                    select(name="type")
+                      option(value="reward") Reward
+                      option(value="purchase") Purchase
+                .control
                   input.input(name="deltaCoin" type="number" placeholder="Delta coin")
-                  p.help Can be + or -
+                  p.help Can be + or -, 0 is valid value
                 .control
                   button.button.is-primary.is-outlined(type='submit') Add
 
