@@ -25,10 +25,19 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   const ds = req.dataSource;
   const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
-  const result = ds.schema.validate(changes, ds.schema.user);
 
+  _.forEach(changes, (v, k) => {
+    if (v.length === 0) {
+      delete changes[k];
+    }
+  });
+
+  if (changes.walletId !== undefined) {
   changes.walletId = Number(changes.walletId);
-  changes.admin = Number(req.body.admin === 'on');
+  }
+  changes.admin = req.body.admin === 'on';
+
+  const result = ds.schema.validate(changes, ds.schema.user);
 
   // make sure username is uniq
   const isUsernameUniq = ds.getUsers({ username: changes.username }).length === 0;
@@ -77,10 +86,19 @@ router.post('/:id', (req, res) => {
   const ds = req.dataSource;
   const user = ds.getUser(req.params.id);
   const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
-  const result = ds.schema.validate(changes, ds.schema.user);
 
+  _.forEach(changes, (v, k) => {
+    if (v.length === 0) {
+      delete changes[k];
+    }
+  });
+
+  if (changes.walletId !== undefined) {
   changes.walletId = Number(changes.walletId);
-  changes.admin = Number(req.body.admin === 'on');
+  }
+  changes.admin = req.body.admin === 'on';
+
+  const result = ds.schema.validate(changes, ds.schema.user);
 
   // make sure username is uniq
   const isUsernameUniq = ds.getUsers({ username: changes.username, $loki: { $ne: user.$loki } }).length === 0;
