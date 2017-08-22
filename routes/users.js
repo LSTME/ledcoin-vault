@@ -48,6 +48,7 @@ router.post('/import', (req, res) => {
       admin: uData[3],
       username: uData[4],
       password: uData[5],
+      photo: uData[6],
     }));
 
   // Remove old data, including transactions
