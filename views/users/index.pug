@@ -12,9 +12,13 @@ block content
           th
       tbody
         each user in users
-          tr(data-href=`users/${user.$loki}`)
+          tr(data-href=`users/${user.$loki}` class=(user.admin ? 'admin' : 'user'))
             td= user.firstName
-            td= user.lastName + (user.admin ? ' (A)' : '')
+            td
+              = user.lastName
+              if user.admin
+                | &nbsp;
+                abbr(title='admin') (a)
             td= user.username
             td= user.walletId
             td

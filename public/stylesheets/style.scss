@@ -25,6 +25,10 @@ table.is-clickable tbody tr {
   cursor: pointer;
 }
 
+table tr {
+  &.admin { color: navy; font-weight: bold; }
+}
+
 .timeline .timeline-item {
     justify-content: space-between;
     padding-bottom: 0;
