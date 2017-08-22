@@ -24,6 +24,20 @@ router.get('/:id/edit', (req, res) => {
   res.render('users/edit', { user });
 });
 
+router.post('/:id/change', (req, res) => {
+  const ds = req.dataSource;
+  const user = ds.getUser(req.params.id)[0];
+  ds.createTransactions({
+    userId: Number(user.$loki),
+    walletId: Number(user.walletId),
+    deltaCoin: Number(req.body.deltaCoin),
+    description: req.body.description,
+    type: 'change',
+    targetId: null,
+  });
+  res.redirect(`/users/${req.params.id}`);
+});
+
 router.post('/:id', (req, res) => {
   const ds = req.dataSource;
   const user = ds.getUser(req.params.id);

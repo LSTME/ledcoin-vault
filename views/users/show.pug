@@ -37,5 +37,16 @@ block content
                 th Wallet Id
                 td= user.walletId
 
+          form(method='POST' action=`/users/${user.$loki}/change`)
+            .field
+              label.label Add change
+              .control
+                textarea.textarea(name="description" placeholder="Comment")
+            .field.has-addons
+              .control
+                input.input(name="deltaCoin" type="number" placeholder="Delta coin")
+              .control
+                button.button.is-primary.is-outlined(type='submit') Add
+
     else
       + message('User not found', 'Not found', 'info')
