@@ -26,7 +26,7 @@ router.get('/:id/edit', (req, res) => {
 
 router.post('/:id/change', (req, res) => {
   const ds = req.dataSource;
-  const user = ds.getUser(req.params.id)[0];
+  const user = ds.getUser(req.params.id);
   ds.createTransactions({
     userId: Number(user.$loki),
     walletId: Number(user.walletId),
