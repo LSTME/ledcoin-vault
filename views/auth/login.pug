@@ -4,8 +4,10 @@ block content
   section.hero.is-fullheight.is-primary.is-bold
     .hero-body
       .container.has-text-centered.narrow
-        a(href='/users')
-          img(src='images/logo-ledcoin.svg')
+        img(src='images/logo-ledcoin.svg' width="200")
+
+        br
+        br
 
         if error
           + message(error, 'Could not login', 'danger')
