@@ -1,4 +1,7 @@
 build:
 	docker build -t ledcoin-vault .
 
-.PHONY: build
+deploy:
+	DOCKER_HOST=127.0.0.1:12375 docker-compose up --force-recreate -d
+
+.PHONY: build deploy
