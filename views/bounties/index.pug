@@ -13,10 +13,9 @@ block content
           th
       tbody
         each bounty in bounties
-          tr
+          tr(data-href=`/bounties/${bounty.$loki}`)
             td= bounty.$loki
-            td
-              a(href=`/bounties/${bounty.$loki}`)= bounty.description
+            td= bounty.description
             td= bounty.value
             td= bounty.code
             td= bounty.target

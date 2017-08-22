@@ -10,8 +10,7 @@ block content
           th Port
       tbody
         each terminal, key in terminals
-          tr
-            td
-              a(href=`/terminals/${key}`)= terminal.key
+          tr(data-href=`terminals/${key}`)
+            td= terminal.key
             td= terminal.socket.remoteAddress
             td= terminal.socket.remotePort
