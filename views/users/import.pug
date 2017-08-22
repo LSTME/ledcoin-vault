@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  .container
+    form(method='POST' action=`/users/import`)
+      .field
+        label.label Users CSV
+        .control
+          textarea.textarea(rows=20 name="data" placeholder="walletId;lastName;firstName;admin;username;password\n1;Doe;John;1;john.doe;secret")
+      .field
+        + message('', 'Warning', 'warning')
+          | This will remove all existing users AND transactions from database.
+          br
+          | Make sure you have at least on admin in import!
+        button.button.is-warning(type='submit') Import

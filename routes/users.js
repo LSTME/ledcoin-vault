@@ -22,6 +22,42 @@ router.get('/new', (req, res) => {
   res.render('users/new');
 });
 
+router.get('/import', (req, res) => {
+  res.render('users/import');
+});
+
+router.post('/import', (req, res) => {
+  const now = new Date();
+  const ds = req.dataSource;
+  const users = req.body.data.split('\n')
+    .map(r => r.split(';').map((v, i) => {
+      const value = v.trim();
+      switch (i) {
+        case 0: return v.length > 0 ? Number(value) : null;
+        case 3: return value === '1';
+        case 5: return ds.pHash(value);
+        default: return value;
+      }
+    }))
+    .map(uData => ({
+      createdAt: now,
+      updatedAt: now,
+      walletId: uData[0],
+      lastName: uData[1],
+      firstName: uData[2],
+      admin: uData[3],
+      username: uData[4],
+      password: uData[5],
+    }));
+
+  // Remove old data, including transactions
+  ds.clearUsers();
+  ds.clearTransactions();
+
+  ds.createUsers(users);
+  res.redirect('/users');
+});
+
 router.post('/', (req, res) => {
   const ds = req.dataSource;
   const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
@@ -33,7 +69,7 @@ router.post('/', (req, res) => {
   });
 
   if (changes.walletId !== undefined) {
-  changes.walletId = Number(changes.walletId);
+    changes.walletId = Number(changes.walletId);
   }
   changes.admin = req.body.admin === 'on';
 
@@ -94,7 +130,7 @@ router.post('/:id', (req, res) => {
   });
 
   if (changes.walletId !== undefined) {
-  changes.walletId = Number(changes.walletId);
+    changes.walletId = Number(changes.walletId);
   }
   changes.admin = req.body.admin === 'on';
 

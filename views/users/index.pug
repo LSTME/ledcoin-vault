@@ -23,8 +23,9 @@ block content
             td= user.walletId
             td
               a.button.is-small(href=`users/${user.$loki}/edit`) Edit
-              if user.walletId !== undefined
-                a.button.is-small(href=`users/${user.$loki}/enroll`) Enroll
+              //- if user.walletId !== undefined
+              //-   a.button.is-small(href=`users/${user.$loki}/enroll`) Enroll
 
-    a.button.is-danger.is-pulled-right(href='users/clearConfirm') Remove all
+    a.button.is-success.is-outlined.is-pulled-right(href='users/import') Import
+    a.button.is-danger.is-outlined.is-pulled-right(href='users/clearConfirm') Remove all
     a.button.is-success(href='users/new') Add new
