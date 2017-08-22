@@ -64,9 +64,6 @@ LedcoinProtocol.prototype.GetAuth = function (callerId, targetChallenge) {
 
 LedcoinProtocol.prototype.IsValid = function (callerId, targetId, targetChallenge, signature) {
   const correct = crypto.M(callerId, targetId, targetChallenge);
-  console.log((correct >> 8) & 0xFF, correct & 0xFF);
-  console.log(`IsValid(${callerId}, ${targetId}, ${targetChallenge}) === ${signature}`);
-  console.log(`${signature} === ${correct} ? `, signature === correct);
   return signature === correct;
 };
 
