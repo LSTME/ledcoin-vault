@@ -45,6 +45,7 @@ router.post('/:id', (req, res) => {
   const result = ds.schema.validate(changes, ds.schema.user);
 
   changes.walletId = Number(changes.walletId);
+  changes.admin = Number(req.body.admin === 'on');
 
   // make sure username is uniq
   const isUsernameUniq = ds.getUsers({ username: changes.username, $loki: { $ne: user.$loki } }).length === 0;
@@ -82,7 +83,7 @@ router.get('/:id', (req, res) => {
   const { dataSource } = req;
   const user = dataSource.getUser(req.params.id);
   const transactions = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
-  res.render('users/show', { user, transactions });
+  res.render('users/show', { user, transactions, adminLayout: true });
 });
 
 module.exports = router;

@@ -14,7 +14,7 @@ block content
       tbody
         each user in users
           tr
-            td= user.$loki
+            td= user.$loki + '' + (user.admin ? ' (A)' : '')
             td= user.firstName
             td
               a(href=`users/${user.$loki}`)= user.lastName

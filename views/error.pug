@@ -1,8 +1,9 @@
 extends blank
 
 block content
-  .container
-    .content
-      h1= message
-      h2= error.status
-      pre #{error.stack}
+  .hero.is-fullheight
+    .hero-body
+      .container
+        + message(message, error.status || 'Error', 'danger')
+          if error.stack
+            pre= error.stack

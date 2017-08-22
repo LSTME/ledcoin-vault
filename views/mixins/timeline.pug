@@ -7,8 +7,9 @@ mixin timeline(transactions)
     for t in transactions
       li.timeline-item(class=(t.deltaCoin > 0 ? 'is-success' : t.deltaCoin < 0 ? 'is-danger' : ''))
         .timeline-content
-          .delete-button
-            + postLink(`/transactions/${t.$loki}/delete`, '').delete.is-small
+          if adminLayout
+            .delete-button
+              + postLink(`/transactions/${t.$loki}/delete`, '').delete.is-small
           p= moment(t.createdAt).format('ddd Do - HH:mm')
           p.heading
             span.delta
@@ -16,12 +17,19 @@ mixin timeline(transactions)
                 = '+'
               = t.deltaCoin
             span -
-            span.target
-              if t.type === 'bounty'
-                a(href=`/bounties/${t.targetId}`)= `${t.type} (${t.targetId})`
-              else if t.type === 'game'
-                a(href=`/users/${t.targetId}`)= `${t.type} (${t.targetId})`
-              else if t.type === 'purchase'
-                = `${t.type} (${t.targetId})`
+            if adminLayout
+              span.target
+                if t.type === 'bounty'
+                  a(href=`/bounties/${t.targetId}`)= `${t.type} (${t.targetId})`
+                else if t.type === 'game'
+                  a(href=`/users/${t.targetId}`)= `${t.type} (${t.targetId})`
+                else if t.type === 'purchase'
+                  = `${t.type} (${t.targetId})`
+            else
+              span.target= t.type
+
+          p
+            = t.description
+          hr
     li.timeline-header
       span.tag.is-primary.is-large= `Start: ${start}`

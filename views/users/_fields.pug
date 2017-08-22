@@ -5,6 +5,12 @@
 +field('photo', 'Photo')
 +field('dateOfBirth', 'DOB')
 +field('walletId', 'Wallet ID')
+
+.field
+  label.checkbox
+    input(type='checkbox' name='admin' checked=(result.value.admin || undefined))
+    | Is admin
+
 br
 hr
 br

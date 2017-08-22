@@ -4,6 +4,7 @@
 
 .navbar + .container {
     margin-top: 2em;
+    margin-bottom: 2em;
 }
 
 .container.narrow {
@@ -12,6 +13,12 @@
 
 button.is-block {
     width: 100%;
+}
+
+.checkbox {
+  input {
+    margin-right: 1em;
+  }
 }
 
 .timeline .timeline-item {
@@ -34,6 +41,7 @@ button.is-block {
     }
 
     .timeline-content {
+        width: 100%;
         padding: 0.3em 2em;
         font-size: 11px;
 
@@ -61,4 +69,13 @@ button.is-block {
   }
 }
 
+.user-detail {
+  .card {
+    max-width: 300px;
+    margin: 0 auto;
+  }
 
+  .card + table {
+    margin-top: 2em;
+  }
+}
