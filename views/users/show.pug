@@ -7,8 +7,14 @@ block content
         .column.is-two-thirds-tablet.is-half-desktop
           .card
             .card-image
-              figure.image
-                img(src=`${user.photo}`, alt='User photo')
+              if user.photo
+                figure.image
+                  img(src=`/photos/${user.photo}.jpg`, alt=user.photo)
+              else
+                + message('', "HUH?", 'danger')
+                  | Kde mas fotku?
+                  br
+                  | Chod sa odfotit k Mariovi
             .card-content
               .media
                 .media-content
