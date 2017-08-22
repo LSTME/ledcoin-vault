@@ -8,6 +8,7 @@ block content
           th ID
           th First name
           th Last name
+          th Username
           th Wallet Id
           th
       tbody
@@ -17,6 +18,7 @@ block content
             td= user.firstName
             td
               a(href=`users/${user.$loki}`)= user.lastName
+            td= user.username
             td= user.walletId
             td
               a.button.is-small(href=`users/${user.$loki}/edit`) Edit

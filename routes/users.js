@@ -20,15 +20,34 @@ router.post('/clear', (req, res) => {
 
 router.get('/:id/edit', (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id)[0];
+  const user = dataSource.getUser(req.params.id);
   res.render('users/edit', { user });
 });
 
 router.post('/:id', (req, res) => {
   const ds = req.dataSource;
-  const user = ds.getUser(req.params.id)[0];
-  const changes = _.pick(req.body, ['firstName', 'lastName', 'photo', 'dateOfBirth', 'walletId']);
+  const user = ds.getUser(req.params.id);
+  const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
   const result = ds.schema.validate(changes, ds.schema.user);
+
+  changes.walletId = Number(changes.walletId);
+
+  // make sure username is uniq
+  const isUsernameUniq = ds.getUsers({ username: changes.username, $loki: { $ne: user.$loki } }).length === 0;
+  if (!isUsernameUniq) {
+    result.error = result.error || {};
+    result.error.details = result.error.details || [];
+    result.error.details.push({
+      message: '"username" must be uniq',
+      path: 'username',
+      type: 'any.uniq',
+      context: {},
+    });
+  }
+
+  if (req.body.password.length > 0) {
+    changes.password = ds.pHash(req.body.password);
+  }
 
   if (result.error) {
     res.render('users/edit', { user, result });
@@ -40,14 +59,14 @@ router.post('/:id', (req, res) => {
 
 router.get('/:id/enroll', (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id)[0];
+  const user = dataSource.getUser(req.params.id);
   const enrollCode = '0001021020112233eefdfeff';
   res.render('users/enroll', { user, enrollCode });
 });
 
 router.get('/:id', (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id)[0];
+  const user = dataSource.getUser(req.params.id);
   const transactions = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
   res.render('users/show', { user, transactions });
 });
