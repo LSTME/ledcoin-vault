@@ -1,6 +1,5 @@
 /* eslint-disable */
-
-/* LEDCODE transmit module 1.0
+/* LEDCODE transmit module 1.2
  * Author: xpavlicek, 2017
  */
 var Ledcode = function(box){
@@ -14,9 +13,8 @@ var Ledcode = function(box){
 	var _lastFrameTimestamp = 0;
 	var HIGH_COLOR = '#fff';
 	var LOW_COLOR = '#000';
-	var _frameRateData = [];
 
-	_box.style.backgroundColor = LOW_COLOR;
+  _box.style.backgroundColor = LOW_COLOR;
 
 	var log = function(val) {
 		console.log(`[LEDCODE] ${val}`);
@@ -25,21 +23,7 @@ var Ledcode = function(box){
 	var transmitFrame = function(timestamp) {
 		// Calculate time from last frame.
 		var time = Math.trunc(timestamp - _lastFrameTimestamp);
-
-		// Calculate frame length for debug reasons.
-		if (_frameRateData.length < 8)
-		{
-			_frameRateData.push(time);
-		}
-		else if (_frameRateData.length == 8)
-		{
-			var sum = 0;
-			for (var i = 0; i < _frameRateData.length; i++) sum += _frameRateData[i];
-			var frameLength = Math.round( sum / _frameRateData.length );
-			log('Frame length ' + frameLength + ' ms.');
-			_frameRateData.push(-1);
-		}
-
+		_lastFrameTimestamp = timestamp;
 
 		// Time was very short, wait until next frame. (high refresh rate?).
 		if (time < 10)
@@ -55,12 +39,12 @@ var Ledcode = function(box){
 			if (_index == 0 && !_repeat) return;
 			// Set value.
 			_box.style.backgroundColor = (_pattern[_index] == 1) ? HIGH_COLOR : LOW_COLOR;
-			// Store timestamp.
-			_lastFrameTimestamp = timestamp;
 		}
 		else if (time < 46)
 		{
 			// Frame was skipped.
+
+			//console.log('Time: ' + time);
 
 			// Look if it's a problem..
 			var actualValue = _pattern[_index];
@@ -75,29 +59,22 @@ var Ledcode = function(box){
 				_index = (_index + 1) % _pattern.length;
 				_box.style.backgroundColor = (_pattern[_index] == 1) ? HIGH_COLOR : LOW_COLOR;
 				if (_index == 0 && !_repeat) return;
-
-				// Store timestamp.
-				_lastFrameTimestamp = timestamp;
 			}
 			else
 			{
 				// Data are incorrect, reset.
 
 				// Reset trasmitter.
-				_lastFrameTimestamp = timestamp;
 				_index = 0;
 				_box.style.backgroundColor = LOW_COLOR;
 				log('Frame timing error!');
-				_frameRateData = [];
 			}
 		}
 		else
 		{
 			// Lag or first frame. Reset transmitter.
-			_lastFrameTimestamp = timestamp;
 			_index = 0;
 			_box.style.backgroundColor = LOW_COLOR;
-			_frameRateData = [];
 		}
 
 		// Register for next animation frame.
@@ -107,7 +84,7 @@ var Ledcode = function(box){
 	var encode = function(data) {
 
 		// Start with preamble for message.
-    _pattern = [ 0, 1, 1, 1, 1, 1 ];
+		_pattern = [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
 
 		for (var dataIndex = 0; dataIndex < data.length; dataIndex++)
 		{
@@ -127,20 +104,24 @@ var Ledcode = function(box){
 			for (var i = 0; i < 8; i++)
 			{
 				_pattern.push( patternState );
-				if (binaryByte[i] == 1) _pattern.push( patternState );
+				_pattern.push( patternState );
+				if (binaryByte[i] == 1) {
+          _pattern.push( patternState );
+          _pattern.push( patternState );
+        }
 				patternState = (patternState == 0) ? 1 : 0;
 			}
 		}
 
 		// Add epilogue.
-		_pattern.push( 0, 0, 0 );
+		_pattern.push( 0, 0, 0, 0 );
 
-		// console.log(_pattern);
+		//console.log(_pattern);
 	};
 
 	return {
 		transmit: function(data) {
- 			encode(data);
+			encode(data);
 			_lastFrameTimestamp = 0;
 			_repeat = 0;
 			window.requestAnimationFrame(transmitFrame);
