@@ -6,5 +6,6 @@ services:
       - SESSION_SECRET=secret
     ports:
       - 3000:3000
+      - 8124:8124
     volumes:
       - /opt/ledcoin-vault/data:/data
