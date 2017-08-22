@@ -21,6 +21,10 @@ button.is-block {
   }
 }
 
+table.is-clickable tbody tr {
+  cursor: pointer;
+}
+
 .timeline .timeline-item {
     justify-content: space-between;
     padding-bottom: 0;

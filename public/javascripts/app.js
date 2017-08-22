@@ -11,5 +11,15 @@ $().ready(() => {
       blinker.transmit(data);
     });
   });
+
+  $('table.is-clickable tr').click((e) => {
+    if (e.target.href) return true;
+
+    const href = $(e.target).parent('[data-href]').data('href');
+    if (href) {
+      window.location.href = href;
+    }
+    return false;
+  });
 });
 

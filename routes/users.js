@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   const { dataSource } = req;
-  const users = dataSource.getUsers();
+  const users = _.sortBy(dataSource.getUsers(), ['admin', 'lastName']);
   res.render('users/index', { users });
 });
 

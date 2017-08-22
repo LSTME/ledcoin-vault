@@ -2,10 +2,9 @@ extends ../layout
 
 block content
   .container
-    table.table.is-fullwidth
+    table.table.is-fullwidth.is-clickable
       thead
         tr
-          th ID
           th First name
           th Last name
           th Username
@@ -13,11 +12,9 @@ block content
           th
       tbody
         each user in users
-          tr
-            td= user.$loki + '' + (user.admin ? ' (A)' : '')
+          tr(data-href=`users/${user.$loki}`)
             td= user.firstName
-            td
-              a(href=`users/${user.$loki}`)= user.lastName
+            td= user.lastName + (user.admin ? ' (A)' : '')
             td= user.username
             td= user.walletId
             td
