@@ -1,0 +1,11 @@
+version: '2'
+services:
+  ledcoin-vault:
+    build: .
+    environment:
+      - SESSION_SECRET=secret
+      - PASSWORD_SALT=salt
+    ports:
+      - 3000:3000
+    volumes:
+      - /opt/ledcoin-vault/data:/data
