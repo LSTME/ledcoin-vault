@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  .container
+    - result = result ? result : {value: {}}
+
+    form(method='POST' action=`/users`)
+      p.title New user
+      include _fields
+      button.button.is-primary(type='submit') SAVE
