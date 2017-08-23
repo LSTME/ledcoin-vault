@@ -1,15 +1,9 @@
-nav.navbar.has-shadow
-  .navbar-brand
-    a.navbar-item(href='/')
-      img.is-64x64(src='/images/logo-ledcoin.svg', alt='LSTME')
-
-  if currentUser.admin
-    .navbar-start
-      a.navbar-item(href='/users') Users
-      a.navbar-item(href='/bounties') Bounties
-      a.navbar-item(href='/transactions') Transactions
-      a.navbar-item(href='/terminals') Terminals
-
-  .navbar-end
-    a.navbar-item(href='/me')= currentUser.username
-    a.navbar-item(href='/logout') Log out
+title= title || 'Ledcoin Vault'
+meta(name="viewport" content="width=device-width, initial-scale=1")
+link(rel='stylesheet', href='/stylesheets/style.css')
+link(rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png")
+link(rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png")
+link(rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png")
+link(rel="manifest" href="/manifest.json")
+link(rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5")
+meta(name="theme-color" content="#ffffff")
