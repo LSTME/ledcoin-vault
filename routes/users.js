@@ -19,6 +19,13 @@ router.post('/clear', (req, res) => {
   res.redirect('/users');
 });
 
+router.get('/export', (req, res) => {
+  const { dataSource } = req;
+  const users = dataSource.getUsers();
+  const transactions = dataSource.getTransactions();
+  res.json({ users, transactions });
+});
+
 router.get('/new', (req, res) => {
   res.render('users/new');
 });
