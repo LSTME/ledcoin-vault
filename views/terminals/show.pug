@@ -1,0 +1,140 @@
+extends ../layout
+
+block content
+  .container
+    if terminal
+      .columns
+        .column.is-one-quarter
+          h1.title.is-4= terminal.key
+          hr
+
+          form#setId
+            input(type='hidden' name='procedure' value='setId')
+            .field
+              label.label(for='id') Set WalletId:
+              .control
+                input.input(type='number' name="id")
+            .field
+              button.button(type='submit' name='protocol' value='TCP') Send
+
+          form(method='TCP')
+            .field
+              label.label(for='message') Send message to serial port:
+              .control
+                .select
+                  select(name='command')
+                    for cmd in commands
+                      option(value=cmd)= cmd
+            .field
+              .control
+                textarea.textarea(type='text' name='message' placeholder='0\n2,15,255')
+                p.help Separate values with ',', arguments with '\n'
+            .field
+              button.button(type='submit' name='protocol' value='TCP') Send
+
+          br
+
+          + message(undefined, 'Red led', 'danger')
+            form(method='WEBSOCKET')
+              input(type='hidden' name='led' value='red')
+              .field.has-addons
+                .control
+                  button.button.is-danger.is-outlined(type='submit' value="high") High
+                .control
+                  button.button.is-danger.is-outlined(type='submit' value="low") Low
+
+          + message(undefined, 'Red led', 'success')
+            form(method='WEBSOCKET')
+              input(type='hidden' name='led' value='green')
+              .field.has-addons
+                .control
+                  button.button.is-success.is-outlined(type='submit' value="high") High
+                .control
+                  button.button.is-success.is-outlined(type='submit' value="low") Low
+
+          .content
+            p Some hints:
+            p You can use WriteEEPROM with
+            pre
+              | 1
+              | 31
+            p to set WalletId to 31
+
+        .column
+          .card
+            .card-header
+              p.card-header-title Terminal log
+            .card-content#websocketLog(data-url=`/terminals/${terminal.key}/log`)
+              //- iframe#websocketLog(src=`/terminals/${terminal.key}/log` style="width: 100%; min-height: 600px")
+    else
+      + message('Terminal with specified key not found', 'Not found', 'info')
+
+
+block scripts
+  script.
+    const refreshLog = () => {
+      const log = $('#websocketLog');
+      $.get(log.data('url'))
+        .done(data => log.html(data))
+        .fail(_ => log.html('Could not load log. Terminal probably disconnected.'));
+      return false;
+    };
+
+    refreshLog();
+    setInterval(refreshLog, 1000);
+
+    $('#setId [type="submit"]').click((e) => {
+      const form = $(e.target.form);
+      const body = {
+        protocol: 'TCP',
+        procedure: form.find('[name="procedure"]').val(),
+        id: form.find('[name="id"]').val(),
+      };
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });
+
+    $('form[method=WEBSOCKET] [type="submit"]').click((e) => {
+      const form = $(e.target.form);
+      const body = {
+        protocol: 'WEBSOCKET',
+        message: {
+          led: form.find('[name="led"]').val(),
+          value: e.target.value,
+        }
+      };
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });
+
+    $('form[method=TCP]').submit((e) => {
+      const form = $(e.target);
+      const body = {
+        protocol: 'TCP',
+        command: form.find('[name="command"]').val(),
+        message: form.find('[name="message"]').val(),
+      };
+
+      $.ajax({
+        contentType: 'application/json',
+        data: JSON.stringify(body),
+        success: refreshLog,
+        type: 'POST',
+        url: '',
+      });
+      return false;
+    });

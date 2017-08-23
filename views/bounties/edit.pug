@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  .container
+    - result = result ? result : {value: bounty}
+
+    form(method='POST' action=`/bounties/${bounty.$loki}`)
+      p.title Edit bounty
+      include _fields
+      button.button.is-primary(type='submit') SAVE

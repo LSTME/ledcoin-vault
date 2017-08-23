@@ -1,0 +1,23 @@
+extends ../layout
+
+mixin row(label, value)
+  tr
+    th= label
+    td
+      if block
+        block
+      else
+        = value
+
+block content
+  .container
+    table.table.is-fullwidth
+      tbody
+        +row('ID', bounty.$loki)
+        +row('Description', bounty.description)
+        +row('Value', bounty.value)
+        +row('Code', bounty.code)
+        +row('Target', bounty.target)
+        +row('UrlKey', bounty.urlKey)
+        +row('Url')
+          a(href=bounty.url)= bounty.url

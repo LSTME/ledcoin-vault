@@ -1,0 +1,23 @@
+extends ../blank
+
+block content
+  section.hero.is-fullheight.is-primary.is-bold
+    .hero-body
+      .container.has-text-centered.narrow
+        img(src='images/logo-ledcoin.svg' width="200")
+
+        br
+        br
+
+        if error
+          + message(error, 'Could not login', 'danger')
+        form(action='/login' method='post')
+          .field
+            .control
+              input.input(type="text" name="username" placeholder="username")
+          .field
+            .control
+              input.input(type="password" name="password" placeholder="password")
+
+          .field
+            button.button.is-primary.is-inverted.is-full-width(type="submit") Login

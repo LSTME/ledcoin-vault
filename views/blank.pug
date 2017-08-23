@@ -1,0 +1,17 @@
+include mixins/ledcode
+include mixins/field
+include mixins/postLink
+include mixins/message
+
+doctype html
+html
+  head
+    title= title
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
+
+    script(type="text/javascript" src='/javascripts/jquery-3.2.1.min.js')
+    script(type="text/javascript" src='/javascripts/ledcode.js')
+    script(type="text/javascript" src='/javascripts/app.js')

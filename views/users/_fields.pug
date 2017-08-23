@@ -1,0 +1,17 @@
+
++field('firstName', 'First name')
++field('lastName', 'Last name')
++field('username', 'Username')
++field('photo', 'Photo')
++field('dateOfBirth', 'DOB')
++field('walletId', 'Wallet ID')
+
+.field
+  label.checkbox
+    input(type='checkbox' name='admin' checked=(result.value.admin || undefined))
+    | Is admin
+
+br
+hr
+br
++field('password', 'Password', 'Keep empty if you don\'t want to change password')(type='password' value='')

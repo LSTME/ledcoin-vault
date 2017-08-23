@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  .container
+    table.table.is-fullwidth.is-clickable
+      thead
+        tr
+          th First name
+          th Last name
+          th Username
+          th Wallet Id
+          th
+      tbody
+        each user in users
+          tr(data-href=`users/${user.$loki}` class=(user.admin ? 'admin' : 'user'))
+            td= user.firstName
+            td
+              = user.lastName
+              if user.admin
+                | &nbsp;
+                abbr(title='admin') (a)
+            td= user.username
+            td= user.walletId
+            td
+              a.button.is-small(href=`users/${user.$loki}/edit`) Edit
+              //- if user.walletId !== undefined
+              //-   a.button.is-small(href=`users/${user.$loki}/enroll`) Enroll
+
+    a.button.is-success.is-outlined.is-pulled-right(href='users/import') Import
+    a.button.is-danger.is-outlined.is-pulled-right(href='users/clearConfirm') Remove all
+    a.button.is-success(href='users/new') Add new

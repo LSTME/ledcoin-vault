@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  .container
+    table.table.is-fullwidth.is-clickable
+      thead
+        tr
+          th Key
+          th Address
+          th Port
+      tbody
+        each terminal, key in terminals
+          tr(data-href=`terminals/${key}`)
+            td= terminal.key
+            td= terminal.socket.remoteAddress
+            td= terminal.socket.remotePort

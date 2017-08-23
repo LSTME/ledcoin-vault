@@ -1,0 +1,89 @@
+@import './variables';
+@import 'bulma/bulma';
+@import './modules/timeline';
+
+.navbar + .container {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.container.narrow {
+    max-width: 500px;
+}
+
+button.is-block {
+    width: 100%;
+}
+
+.checkbox {
+  input {
+    margin-right: 1em;
+  }
+}
+
+table.is-clickable tbody tr {
+  cursor: pointer;
+}
+
+table tr {
+  &.admin { color: navy; font-weight: bold; }
+}
+
+.timeline .timeline-item {
+    justify-content: space-between;
+    padding-bottom: 0;
+
+    &::before {
+        top: calc(50% - 0.4rem);
+    }
+
+    &.is-without-marker::before {
+      display: none;
+    }
+
+    .delete-button {
+      visibility: hidden;
+      position: absolute;
+      top: 0.3em;
+      right: 0;
+    }
+
+    .timeline-content {
+        width: 100%;
+        padding: 0.3em 2em;
+        font-size: 11px;
+
+        .heading {
+            margin-bottom: 0;
+
+            span {
+                padding-right: 1em;
+
+                &.delta {
+                    font-size: 1.3em;
+                }
+            }
+        }
+    }
+
+    &:hover .delete-button {
+      visibility: visible;
+    }
+}
+
+.timeline-item {
+  .timeline-content hr {
+    margin: 0.3em 0;
+  }
+}
+
+.user-detail {
+  .card {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .card + table {
+    margin-top: 2em;
+  }
+}

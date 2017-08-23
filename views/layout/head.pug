@@ -1,0 +1,15 @@
+nav.navbar.has-shadow
+  .navbar-brand
+    a.navbar-item(href='/')
+      img.is-64x64(src='/images/logo-ledcoin.svg', alt='LSTME')
+
+  if currentUser.admin
+    .navbar-start
+      a.navbar-item(href='/users') Users
+      a.navbar-item(href='/bounties') Bounties
+      a.navbar-item(href='/transactions') Transactions
+      a.navbar-item(href='/terminals') Terminals
+
+  .navbar-end
+    a.navbar-item(href='/me')= currentUser.username
+    a.navbar-item(href='/logout') Log out

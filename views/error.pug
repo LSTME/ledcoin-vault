@@ -1,0 +1,9 @@
+extends blank
+
+block content
+  .hero.is-fullheight
+    .hero-body
+      .container
+        + message(message, error.status || 'Error', 'danger')
+          if currentUser && currentUser.admin
+            pre= error.stack

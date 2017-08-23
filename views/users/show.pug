@@ -1,0 +1,80 @@
+extends ../layout
+
+block content
+  .container.user-detail
+    if user
+      .columns
+        .column.is-two-thirds-tablet.is-half-desktop
+          .card
+            .card-image
+              if user.photo
+                figure.image
+                  img(src=`/photos/${user.photo}.jpg`, alt=user.photo)
+              else
+                + message('', "HUH?", 'danger')
+                  | Kde mas fotku?
+                  br
+                  | Chod sa odfotit k Mariovi
+            .card-content
+              .media
+                .media-content
+                  p.title.is-4= `${user.firstName} ${user.lastName}`
+                  p.subtitle.is-6
+                    = `${moment(user.dateOfBirth).format('MMM. YYYY')} (${moment().diff(user.dateOfBirth, 'years')})`
+                    if user.admin
+                      br
+                      | (admin)
+
+          table.table.is-fullwidth
+            tbody
+              tr
+                th First name
+                td= user.firstName
+              tr
+                th Last name
+                td= user.lastName
+              tr
+                th Username
+                td= user.username
+              tr
+                th Date of birth
+                td= moment(user.dateOfBirth).format('DD.MM.YYYY')
+              tr
+                th Wallet Id
+                td= user.walletId
+
+          if adminLayout
+            form(method='POST' action=`/users/${user.$loki}/change`)
+              .field
+                label.label Add change
+                .control
+                  textarea.textarea(name="description" placeholder="Comment")
+                  p.help Comment is visible to everyone
+              .field.has-addons
+                .control
+                  span.select
+                    select(name="type")
+                      option(value="reward") Reward
+                      option(value="purchase") Purchase
+                .control
+                  input.input(name="deltaCoin" type="number" placeholder="Delta coin")
+                  p.help Can be + or -, 0 is valid value
+                .control
+                  button.button.is-primary.is-outlined(type='submit') Add
+
+        .column
+          if adminLayout
+            form(action=`/users/${user.$loki}/sync` method='POST')
+              .field.has-addons.is-pulled-right
+                .control
+                  span.select
+                    select(name="terminal")
+                      for term in terminals
+                        option(value=term)= term
+                .control
+                  button.button.is-primary.is-outlined(type='submit') Update wallet
+
+          + timeline(transactions)
+
+    else
+      + message('User not found', 'Not found', 'info')

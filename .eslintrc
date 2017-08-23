@@ -1,0 +1,17 @@
+{
+  "extends": ["airbnb-base"],
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "globals": {
+    "Ledcode": true
+  },
+  "rules": {
+    "no-console": 0,
+    "max-len": "off",
+    "no-undef": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "no-alert": 0
+  }
+}

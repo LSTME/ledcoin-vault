@@ -1,0 +1,19 @@
+extends ../layout
+
+block content
+  .container
+    .columns
+      .column.is-one-third
+        + ledcode(enrollCode)
+      .column
+        table.table.is-fullwidth
+          tbody
+            tr
+              th First name
+              td= user.firstName
+            tr
+              th Last name
+              td= user.lastName
+            tr
+              th Wallet ID
+              td= user.walletId

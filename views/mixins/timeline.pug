@@ -1,0 +1,26 @@
+mixin timeline(transactions)
+  - start = 0
+  - total = transactions.reduce((sum, t) => sum + t.deltaCoin, start);
+  ul.timeline
+    li.timeline-header
+      span.tag.is-primary.is-large= `Now: ${total}`
+    for t in transactions
+      li.timeline-item(class=(t.deltaCoin > 0 ? 'is-success' : t.deltaCoin < 0 ? 'is-danger' : ''))
+        .timeline-content
+          if adminLayout
+            .delete-button
+              + postLink(`/transactions/${t.$loki}/delete`, '').delete.is-small
+          p= moment(t.createdAt).format('ddd Do - HH:mm')
+          p.heading
+            span.delta
+              if t.deltaCoin > 0
+                = '+'
+              = t.deltaCoin
+            span -
+            span.target= t.type
+
+          p
+            = t.description
+          hr
+    li.timeline-header
+      span.tag.is-primary.is-large= `Start: ${start}`
