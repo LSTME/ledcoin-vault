@@ -1,0 +1,6 @@
+version: '2'
+services:
+  postgres:
+    volumes:
+      - /opt/ledcoin-vault/dumps:/dumps
+      - /opt/ledcoin-vault/postgres:/var/lib/postgresql/data
