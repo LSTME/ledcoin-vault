@@ -4,7 +4,7 @@ block content
   .container
     - result = result ? result : {value: user}
 
-    form(method='POST' action=`/users/${user.$loki}`)
+    form(method='POST' action=`/users/${user.id}`)
       p.title Edit user
       include _fields
       button.button.is-primary(type='submit') SAVE

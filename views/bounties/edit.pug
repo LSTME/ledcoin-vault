@@ -4,7 +4,7 @@ block content
   .container
     - result = result ? result : {value: bounty}
 
-    form(method='POST' action=`/bounties/${bounty.$loki}`)
+    form(method='POST' action=`/bounties/${bounty.id}`)
       p.title Edit bounty
       include _fields
       button.button.is-primary(type='submit') SAVE

@@ -4,9 +4,9 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { dataSource } = req;
-  const users = _.sortBy(dataSource.getUsers(), ['admin', 'lastName']);
+  const users = _.sortBy(await dataSource.getUsers(), ['admin', 'lastName']);
   res.render('users/index', { users });
 });
 
@@ -14,15 +14,15 @@ router.get('/clearConfirm', (req, res) => {
   res.render('users/clearConfirm');
 });
 
-router.post('/clear', (req, res) => {
-  req.dataSource.clearUsers();
+router.post('/clear', async (req, res) => {
+  await req.dataSource.clearUsers();
   res.redirect('/users');
 });
 
-router.get('/export', (req, res) => {
+router.get('/export', async (req, res) => {
   const { dataSource } = req;
-  const users = dataSource.getUsers();
-  const transactions = dataSource.getTransactions();
+  const users = await dataSource.getUsers();
+  const transactions = await dataSource.getTransactions();
   res.json({ users, transactions });
 });
 
@@ -34,17 +34,21 @@ router.get('/import', (req, res) => {
   res.render('users/import');
 });
 
-router.post('/import', (req, res) => {
+router.post('/import', async (req, res) => {
   const now = new Date();
   const ds = req.dataSource;
   const users = req.body.data.split('\n')
     .map(r => r.split(';').map((v, i) => {
       const value = v.trim();
       switch (i) {
-        case 0: return v.length > 0 ? Number(value) : null;
-        case 3: return value === '1';
-        case 5: return ds.pHash(value);
-        default: return value;
+        case 0:
+          return v.length > 0 ? Number(value) : null;
+        case 3:
+          return value === '1';
+        case 5:
+          return ds.hashPassword(value);
+        default:
+          return value;
       }
     }))
     .map(uData => ({
@@ -60,14 +64,14 @@ router.post('/import', (req, res) => {
     }));
 
   // Remove old data, including transactions
-  ds.clearUsers();
-  ds.clearTransactions();
+  await ds.clearUsers();
+  await ds.clearTransactions();
 
-  ds.createUsers(users);
+  await ds.createUsers(users);
   res.redirect('/users');
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const ds = req.dataSource;
   const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
 
@@ -85,7 +89,8 @@ router.post('/', (req, res) => {
   const result = ds.schema.validate(changes, ds.schema.user);
 
   // make sure username is uniq
-  const isUsernameUniq = ds.getUsers({ username: changes.username }).length === 0;
+  const testUsers = await ds.getUsers({ where: { username: changes.username } });
+  const isUsernameUniq = testUsers.length === 0;
   if (!isUsernameUniq) {
     ds.addJoiError(result, 'username', 'any.uniq', 'must be uniq');
   }
@@ -95,21 +100,21 @@ router.post('/', (req, res) => {
     ds.addJoiError(result, 'password', 'any.length', 'must have at least 5 characters');
   }
 
-  changes.password = ds.pHash(req.body.password);
+  changes.password = ds.hashPassword(req.body.password);
 
   if (result.error) {
     res.render('users/new', { result });
   } else {
     changes.createdAt = new Date();
     changes.updatedAt = new Date();
-    ds.createUsers([changes]);
+    await ds.createUsers([changes]);
     res.redirect('/users');
   }
 });
 
-router.post('/:id/sync', (req, res) => {
+router.post('/:id/sync', async (req, res) => {
   const ds = req.dataSource;
-  const user = ds.getUser(req.params.id);
+  const user = await ds.getUser(req.params.id);
   const term = req.context.terminals[req.body.terminal];
   if (term && user) {
     term.syncWalletBalance(user.walletId)
@@ -125,17 +130,16 @@ router.post('/:id/sync', (req, res) => {
   res.redirect(`/users/${req.params.id}`);
 });
 
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', async (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id);
+  const user = await dataSource.getUser(req.params.id);
   res.render('users/edit', { user });
 });
 
-router.post('/:id/change', (req, res) => {
+router.post('/:id/change', async (req, res) => {
   const ds = req.dataSource;
-  const user = ds.getUser(req.params.id);
-  ds.createTransactions({
-    userId: Number(user.$loki),
+  const user = await ds.getUser(req.params.id);
+  await ds.createTransaction({
     walletId: Number(user.walletId),
     deltaCoin: Number(req.body.deltaCoin),
     description: req.body.description,
@@ -145,9 +149,9 @@ router.post('/:id/change', (req, res) => {
   res.redirect(`/users/${req.params.id}`);
 });
 
-router.post('/:id', (req, res) => {
+router.post('/:id', async (req, res) => {
   const ds = req.dataSource;
-  const user = ds.getUser(req.params.id);
+  const user = await ds.getUser(req.params.id);
   const changes = _.pick(req.body, ['firstName', 'lastName', 'username', 'photo', 'dateOfBirth', 'walletId']);
 
   _.forEach(changes, (v, k) => {
@@ -164,35 +168,46 @@ router.post('/:id', (req, res) => {
   const result = ds.schema.validate(changes, ds.schema.user);
 
   // make sure username is uniq
-  const isUsernameUniq = ds.getUsers({ username: changes.username, $loki: { $ne: user.$loki } }).length === 0;
+  const testUsers = await ds.getUsers({
+    where: {
+      username: changes.username,
+      id: { $ne: user.id },
+    },
+  });
+  const isUsernameUniq = testUsers.length === 0;
   if (!isUsernameUniq) {
     ds.addJoiError(result, 'username', 'any.uniq', 'must be uniq');
   }
 
   if (req.body.password.length > 0) {
-    changes.password = ds.pHash(req.body.password);
+    changes.password = ds.hashPassword(req.body.password);
   }
 
   if (result.error) {
     res.render('users/edit', { user, result });
   } else {
-    ds.saveUser(_.merge(user, changes));
+    await ds.saveUser(_.merge(user, changes));
     res.redirect('/users');
   }
 });
 
-router.get('/:id/enroll', (req, res) => {
+router.get('/:id/enroll', async (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id);
+  const user = await dataSource.getUser(req.params.id);
   const enrollCode = '0001021020112233eefdfeff';
   res.render('users/enroll', { user, enrollCode });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { dataSource } = req;
-  const user = dataSource.getUser(req.params.id);
-  const transactions = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
-  res.render('users/show', { user, transactions, adminLayout: true, terminals: Object.keys(req.context.terminals) || [] });
+  const user = await dataSource.getUser(req.params.id);
+  const transactions = _.sortBy(await dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
+  res.render('users/show', {
+    user,
+    transactions,
+    adminLayout: true,
+    terminals: Object.keys(req.context.terminals) || [],
+  });
 });
 
 module.exports = router;

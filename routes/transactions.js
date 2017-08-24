@@ -3,17 +3,17 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { dataSource } = req;
-  const transactions = _.sortBy(dataSource.getTransactions(), ['createdAt']).reverse();
-  const users = _.keyBy(dataSource.getUsers(), i => i.$loki);
-  const bounties = _.keyBy(dataSource.getBounties(), i => i.$loki);
+  const transactions = _.sortBy(await dataSource.getTransactions(), ['createdAt']).reverse();
+  const users = _.keyBy(await dataSource.getUsers(), i => i.id);
+  const bounties = _.keyBy(await dataSource.getBounties(), i => i.id);
   res.render('transactions/index', { transactions, users, bounties });
 });
 
-router.post('/:id/delete', (req, res) => {
+router.post('/:id/delete', async (req, res) => {
   const { dataSource } = req;
-  dataSource.removeTransaction(req.params.id);
+  await dataSource.removeTransaction(req.params.id);
   res.redirect('back');
 });
 

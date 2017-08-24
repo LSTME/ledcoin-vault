@@ -11,9 +11,9 @@ const proto = new Proto();
 //   res.render('bounty', { bounty });
 // });
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const { dataSource } = req;
-  const bounties = dataSource.getBounties();
+  const bounties = await dataSource.getBounties();
   res.render('bounties/index', { bounties });
 });
 
@@ -21,54 +21,52 @@ router.get('/new', (req, res) => {
   res.render('bounties/new');
 });
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
   const ds = req.dataSource;
   const result = ds.schema.validate(req.body, ds.schema.bounty);
-  console.log(result);
 
   if (result.error) {
     res.render('bounties/new', { result });
   } else {
-    const bounty = req.dataSource.createBounties(req.body);
-    console.log(bounty);
+    await req.dataSource.createBounty(req.body);
     res.redirect('/bounties');
   }
 });
 
-router.get('/secret/:key', (req, res) => {
+router.get('/secret/:key', async (req, res) => {
   const { dataSource } = req;
-  const bounty = dataSource.getBountyByKey(req.params.key);
+  const bounty = await dataSource.getBountyByKey(req.params.key);
   const bountyCodeData = proto.SetBounty(
-    Number(bounty.$loki), // ID
+    Number(bounty.id), // ID
     Number(bounty.target), // Recipient
     Number(bounty.value), // Value
   ).toJSON().data;
   res.render('bounties/secret', { bounty, bountyCodeData });
 });
 
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', async (req, res) => {
   const { dataSource } = req;
-  const bounty = dataSource.getBounty(req.params.id);
+  const bounty = await dataSource.getBounty(req.params.id);
   res.render('bounties/edit', { bounty });
 });
 
-router.post('/:id', (req, res) => {
+router.post('/:id', async (req, res) => {
   const ds = req.dataSource;
-  const bounty = ds.getBounty(req.params.id);
+  const bounty = await ds.getBounty(req.params.id);
   const changes = _.pick(req.body, ['description', 'value', 'code', 'target', 'urlKey']);
   const result = ds.schema.validate(changes, ds.schema.bounty);
 
   if (result.error) {
     res.render('bounties/edit', { bounty, result });
   } else {
-    ds.saveUser(_.merge(bounty, changes));
+    await ds.saveUser(_.merge(bounty, changes));
     res.redirect('/bounties');
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const { dataSource } = req;
-  const bounty = dataSource.getBounty(req.params.id);
+  const bounty = await dataSource.getBounty(req.params.id);
   bounty.url = bounty.urlKey ? `/bounties/secret/${bounty.urlKey}` : undefined;
   res.render('bounties/show', { bounty });
 });

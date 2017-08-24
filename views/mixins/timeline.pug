@@ -9,7 +9,7 @@ mixin timeline(transactions)
         .timeline-content
           if adminLayout
             .delete-button
-              + postLink(`/transactions/${t.$loki}/delete`, '').delete.is-small
+              + postLink(`/transactions/${t.id}/delete`, '').delete.is-small
           p= moment(t.createdAt).format('ddd Do - HH:mm')
           p.heading
             span.delta

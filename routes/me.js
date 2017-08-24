@@ -3,10 +3,11 @@ const _ = require('lodash');
 
 const router = express.Router();
 
-router.get('/me', (req, res) => {
+router.get('/me', async (req, res) => {
   const { dataSource } = req;
   const user = req.user;
-  const trans = _.sortBy(dataSource.getTransactionsForWallet(user.walletId), ['createdAt']).reverse();
+  const transactions = await dataSource.getTransactionsForWallet(user.walletId);
+  const trans = _.sortBy(transactions, ['createdAt']).reverse();
   res.render('users/show', { admin: false, user, transactions: trans });
 });
 

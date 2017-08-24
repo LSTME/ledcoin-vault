@@ -44,7 +44,7 @@ block content
                 td= user.walletId
 
           if adminLayout
-            form(method='POST' action=`/users/${user.$loki}/change`)
+            form(method='POST' action=`/users/${user.id}/change`)
               .field
                 label.label Add change
                 .control
@@ -64,7 +64,7 @@ block content
 
         .column
           if adminLayout
-            form(action=`/users/${user.$loki}/sync` method='POST')
+            form(action=`/users/${user.id}/sync` method='POST')
               .field.has-addons.is-pulled-right
                 .control
                   span.select

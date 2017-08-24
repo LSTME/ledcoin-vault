@@ -18,7 +18,7 @@ block content
           th
       tbody
         each user in users
-          tr(data-href=`users/${user.$loki}` class=(user.admin ? 'admin' : 'user'))
+          tr(data-href=`users/${user.id}` class=(user.admin ? 'admin' : 'user'))
             td= user.firstName
             td
               = user.lastName
@@ -28,9 +28,9 @@ block content
             td= user.username
             td= user.walletId
             td
-              a.button.is-small(href=`users/${user.$loki}/edit`) Edit
+              a.button.is-small(href=`users/${user.id}/edit`) Edit
               //- if user.walletId !== undefined
-              //-   a.button.is-small(href=`users/${user.$loki}/enroll`) Enroll
+              //-   a.button.is-small(href=`users/${user.id}/enroll`) Enroll
 
     hr
 
