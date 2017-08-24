@@ -1,0 +1,25 @@
+extends blank
+
+block content
+  .hero.is-success.is-bold.is-fullheight
+    .hero-body
+      .container.dashboard
+        table.table.is-fullwidth
+          thead
+            tr
+              th.index Pos.
+              th.photo
+              th.name Meno
+              th.coins Ledcoiny
+          tbody
+            for user, i in users
+              tr
+                td.index= `${i+1}.`
+                td.photo
+                  + photo(user.photo, false)
+                td.name= `${user.firstName} ${user.lastName}`
+                td.coins= user.get('coins')
+
+block scripts
+  script.
+    setTimeout(() => window.location.href = '', 15000);

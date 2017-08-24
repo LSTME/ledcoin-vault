@@ -1,0 +1,36 @@
+.dashboard {
+  .table {
+    font-size: 3em;
+
+    td, th {
+      vertical-align: middle;
+      padding: 0 0.5em;
+    }
+
+    .index {
+      text-align: right
+    }
+
+    .id {
+      text-align: center;
+    }
+
+    .photo {
+      padding: 0;
+      width: 90px;
+      text-align: center;
+    }
+
+    .name {
+      text-align: left;
+    }
+
+    .coins {
+      text-align: center;
+    }
+
+    td.coins {
+      font-size: 2em;
+    }
+  }
+}

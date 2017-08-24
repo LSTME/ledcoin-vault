@@ -11,4 +11,10 @@ router.get('/me', async (req, res) => {
   res.render('users/show', { admin: false, user, transactions: trans });
 });
 
+router.get('/dashboard', async (req, res) => {
+  const { dataSource } = req;
+  const users = _.sortBy(await dataSource.getUsersTransactionSum(), u => u.get('coins')).reverse();
+  res.render('dashboard', { users });
+});
+
 module.exports = router;

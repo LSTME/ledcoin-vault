@@ -1,6 +1,9 @@
 @import './variables';
+
 @import 'bulma/bulma';
+
 @import './modules/timeline';
+@import './modules/dashboard';
 
 .navbar + .container {
     margin-top: 2em;

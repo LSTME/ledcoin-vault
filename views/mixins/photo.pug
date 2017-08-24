@@ -1,0 +1,13 @@
+mixin photo(photo, prompt = true)
+  if photo
+    figure.image&attributes(attributes)
+      img(src=`${photoPrefix}/photos/${photo}.jpg`, alt=photo)
+  else
+    if prompt
+      + message('', "HUH?", 'danger')&attributes(attributes)
+        | Kde mas fotku?
+        br
+        | Chod sa odfotit k Mariovi
+    else
+      figure.image&attributes(attributes)
+        img(src=`${photoPrefix}/photos/wanted.png`, alt='wanted')
