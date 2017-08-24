@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     admin: DataTypes.BOOLEAN,
   }, {
-    getterMethods: {
-    },
+    getterMethods: {},
   });
   user.associate = (models) => {
+    user.hasMany(models.transaction, { foreignKey: 'walletId', sourceKey: 'walletId' });
   };
   return user;
 };

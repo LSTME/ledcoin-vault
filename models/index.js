@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const pg = require('pg');
 const Sequelize = require('sequelize');
 
 const logger = require('../lib/logger');
@@ -9,6 +10,8 @@ const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';
 const config = configLoader(env);
 const db = {};
+
+pg.defaults.parseInt8 = true;
 
 const sequelize = new Sequelize(config.db.url, {
   logging: logger.db.log,

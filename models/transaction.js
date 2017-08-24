@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     getterMethods: {},
   });
   transaction.associate = (models) => {
+    transaction.belongsTo(models.user, { foreignKey: 'walletId', targetKey: 'walletId' });
   };
   return transaction;
 };
