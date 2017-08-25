@@ -17,7 +17,7 @@ block content
                 td.index= `${i+1}.`
                 td.photo
                   + photo(user.photo, false)
-                td.name= `${user.firstName} ${user.lastName}`
+                td.name= user.fullName
                 td.coins= user.get('coins')
 
 block scripts
