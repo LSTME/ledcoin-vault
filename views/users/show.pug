@@ -36,6 +36,7 @@ block content
                 th Wallet Id
                 td= user.walletId
 
+          a.button.is-small(href=`users/${user.id}/edit`) Edit
           if adminLayout
             form(method='POST' action=`/users/${user.id}/change`)
               .field
