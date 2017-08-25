@@ -38,7 +38,7 @@ router.get('/secret/:key', async (req, res) => {
   const bounty = await dataSource.getBountyByKey(req.params.key);
   const bountyCodeData = proto.SetBounty(
     Number(bounty.id), // ID
-    Number(bounty.target), // Recipient
+    Number(bounty.targetId), // Recipient
     Number(bounty.value), // Value
   ).toJSON().data;
   res.render('bounties/secret', { bounty, bountyCodeData });
@@ -53,7 +53,7 @@ router.get('/:id/edit', async (req, res) => {
 router.post('/:id', async (req, res) => {
   const ds = req.dataSource;
   const bounty = await ds.getBounty(req.params.id);
-  const changes = _.pick(req.body, ['description', 'value', 'code', 'target', 'urlKey']);
+  const changes = _.pick(req.body, ['description', 'value', 'code', 'targetId', 'urlKey']);
   const result = ds.schema.validate(changes, ds.schema.bounty);
 
   if (result.error) {
