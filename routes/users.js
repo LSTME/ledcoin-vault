@@ -1,6 +1,7 @@
 /* eslint no-bitwise: 0 */
 const express = require('express');
 const _ = require('lodash');
+const DataSource = require('../lib/DataSource');
 
 const router = express.Router();
 
@@ -46,7 +47,7 @@ router.post('/import', async (req, res) => {
         case 3:
           return value === '1';
         case 5:
-          return ds.hashPassword(value);
+          return DataSource.hashPassword(value);
         default:
           return value;
       }
@@ -100,7 +101,7 @@ router.post('/', async (req, res) => {
     ds.addJoiError(result, 'password', 'any.length', 'must have at least 5 characters');
   }
 
-  changes.password = ds.hashPassword(req.body.password);
+  changes.password = DataSource.hashPassword(req.body.password);
 
   if (result.error) {
     res.render('users/new', { result });
@@ -180,7 +181,7 @@ router.post('/:id', async (req, res) => {
   }
 
   if (req.body.password.length > 0) {
-    changes.password = ds.hashPassword(req.body.password);
+    changes.password = DataSource.hashPassword(req.body.password);
   }
 
   if (result.error) {
