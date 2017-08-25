@@ -90,3 +90,16 @@ table tr {
     margin-top: 2em;
   }
 }
+
+.users-list {
+  td.coins {
+    position: relative;
+    padding-left: 1em;
+    img {
+      height: 1em;
+      position: absolute;
+      left: 0px;
+      top: 11px;
+    }
+  }
+}

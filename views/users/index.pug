@@ -1,7 +1,7 @@
 extends ../layout
 
 block content
-  .container
+  .container.users-list
     a.button.is-primary.is-outlined.is-pulled-right(href='users/import') Import
     a.button.is-primary.is-outlined.is-pulled-right(href='users/export') Export
     a.button.is-success(href='users/new') Add new
@@ -15,6 +15,7 @@ block content
           th Last name
           th Username
           th Wallet Id
+          th Coins
           th
       tbody
         each user in users
@@ -27,6 +28,9 @@ block content
                 abbr(title='admin') (a)
             td= user.username
             td= user.walletId
+            td.coins
+              img(src='/favicon-32x32.png')
+              = user.get('coins')
             td
               a.button.is-small(href=`users/${user.id}/edit`) Edit
               //- if user.walletId !== undefined
