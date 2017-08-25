@@ -91,15 +91,18 @@ table tr {
   }
 }
 
-.users-list {
-  td.coins {
-    position: relative;
-    padding-left: 1em;
-    img {
-      height: 1em;
-      position: absolute;
-      left: 0px;
-      top: 11px;
-    }
+span.coins {
+  &:before {
+    content: "\00a0";
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-size: cover;
+    background-image: url('/favicon-32x32.png');
   }
+  position: relative;
+  padding-left: 1em;
 }

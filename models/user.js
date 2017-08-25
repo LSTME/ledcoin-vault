@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
     id: {
@@ -20,7 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     admin: DataTypes.BOOLEAN,
   }, {
-    getterMethods: {},
+    getterMethods: {
+      fullName() {
+        return _.chain([this.firstName, this.lastName])
+          .compact()
+          .join(' ')
+          .value();
+      },
+    },
   });
   user.associate = (models) => {
     user.hasMany(models.transaction, { foreignKey: 'walletId', sourceKey: 'walletId' });

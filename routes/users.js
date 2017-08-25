@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const { dataSource } = req;
-  const users = _.sortBy(await dataSource.getUsersTransactionSum(), ['admin', 'lastName']);
+  const users = _.sortBy(await dataSource.getUsersTransactionSum(true), ['admin', 'lastName']);
   res.render('users/index', { users });
 });
 

@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const { dataSource } = req;
-  const transactions = _.sortBy(await dataSource.getTransactions(), ['createdAt']).reverse();
+  const transactions = await dataSource.getTransactions({
+    include: [dataSource.db.models.user],
+    order: [['createdAt', 'DESC']],
+  });
   const users = _.keyBy(await dataSource.getUsers(), i => i.id);
   const bounties = _.keyBy(await dataSource.getBounties(), i => i.id);
   res.render('transactions/index', { transactions, users, bounties });

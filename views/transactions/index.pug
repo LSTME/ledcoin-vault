@@ -6,25 +6,26 @@ block content
       thead
         tr
           th Created at
+          th(title='User ID') UID
           th(title='Wallet ID') WID
           th Type
-          th Target
+          th Description
           th Coins
       tbody
         each transaction in transactions
           - user = users[transaction.userId]
           tr
             td= moment(transaction.createdAt).format('DD.MM.YYYY HH:mm')
+            td
+              if transaction.user
+                a(href=`/users/${transaction.user.id}`)= transaction.user.fullName
+              else
+                |-
             td= transaction.walletId
             td= transaction.type
+            td= transaction.description
             td
-              if transaction.type === 'bounty'
-                a(href=`/bounties/${transaction.targetId}`)
-                  = `${bounties[transaction.targetId].description} (${transaction.targetId})`
-              else if transaction.type === 'game'
-                - otherUser = users[transaction.targetId]
-                a(href=`/users/${transaction.targetId}`)
-                  = `${otherUser.firstName} ${otherUser.lastName} (${transaction.targetId})`
-              else if transaction.type === 'purchase'
-                = `product (${transaction.targetId})`
-            td= transaction.deltaCoin
+              span.coins
+                  if transaction.deltaCoin > 0
+                    = '+'
+                  = transaction.deltaCoin
