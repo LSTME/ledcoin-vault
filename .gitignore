@@ -39,3 +39,7 @@ data/*
 *.exe
 
 docker-compose.yml
+utils/crc8.js
+utils/crypto.js
+utils/LedcoinProtocol*
+utils/cs/*
