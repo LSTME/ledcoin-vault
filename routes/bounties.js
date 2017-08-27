@@ -37,7 +37,7 @@ router.get('/secret/:key', async (req, res) => {
   const { dataSource } = req;
   const bounty = await dataSource.getBountyByKey(req.params.key);
   const bountyCodeData = proto.SetBounty(
-    Number(bounty.id), // ID
+    Number(bounty.code), // ID
     Number(bounty.targetId), // Recipient
     Number(bounty.value), // Value
   ).toJSON().data;

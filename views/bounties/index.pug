@@ -5,7 +5,6 @@ block content
     table.table.is-fullwidth.is-clickable
       thead
         tr
-          th ID
           th Description
           th Value
           th Code
@@ -14,7 +13,6 @@ block content
       tbody
         each bounty in bounties
           tr(data-href=`/bounties/${bounty.id}`)
-            td= bounty.id
             td= bounty.description
             td= bounty.value
             td= bounty.code
