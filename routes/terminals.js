@@ -24,9 +24,9 @@ router.post('/:id', (req, res) => {
     switch (req.body.protocol) {
       case 'TCP':
         if (req.body.procedure) {
-          terminal.tell('GetAuth', [0])
+          terminal.auth()
             .then(() => terminal.tell('WriteEEPROM', [1, [req.body.id]]))
-            .then(() => terminal.tell('DeAuth', [0], false))
+            .then(() => terminal.deauth())
             .catch(e => console.log('error running procedure', e));
         } else {
           const args = req.body.message.split('\n').map(r =>
