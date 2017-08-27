@@ -2,6 +2,10 @@ include ../mixins/message
 include ../mixins/eeprom
 
 if terminal
+  if terminal.connectedWalletId !== undefined
+    + message(`Connected wallet: ${terminal.connectedWalletId}`, undefined, "info")
+  if terminal.authId !== undefined
+    + message(`Authenticated wallet ${terminal.authId}`, undefined, "success")
   - lines = terminal.log.slice().reverse()
   ul.timeline
     for line in lines
